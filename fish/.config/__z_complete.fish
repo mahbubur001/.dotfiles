@@ -1,0 +1,1 @@
+fish/functions/__z_complete.fish
