@@ -1,2 +1,4 @@
-.git:wq
+.git
+nvim/.config/nvim/sessions
+nvim/.config/nvim/undodir
 
