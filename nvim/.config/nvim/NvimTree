@@ -1,0 +1,22 @@
+~/dotfiles/nvim/.config/nvim/..
+   after
+     plugin
+       barbar.vim
+       commentary.vim
+       devicons.lua
+       git.vim
+       gruvbox.vim
+       lsp.vim
+       lualine.lua
+       ★ nvim-tree.vim
+       prettier.vim
+       ✗ telescope.vim
+  ◌ sessions
+  ◌ undodir
+  .netrwhist
+   init.vim
+   macos.vim
+   ✗ maps.vim
+  ★ NvimTree
+   plug.vim
+  README.md

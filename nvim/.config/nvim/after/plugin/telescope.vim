@@ -5,14 +5,6 @@ require('telescope').setup({
   defaults = {
     color_devicons = true,
     file_ignore_patterns = { 'node_modules/.*', '.git/.*', '_site/.*', '.svn/.*' },
-    layout_config = {
-      horizontal = {
-        mirror = true,
-      },
-      vertical = {
-        mirror = true,
-      },
-    },
   },
   extensions = {
     fzf = {
@@ -27,7 +19,7 @@ require('telescope').load_extension('fzf')
 EOF
 
 " nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep For > ")})<CR>
-nnoremap <leader>ff :lua require('telescope.builtin').find_files()<CR>
+nnoremap <C-p> :lua require('telescope.builtin').find_files()<CR>
 nnoremap <leader>of :lua require('telescope.builtin').oldfiles()<CR>
 nnoremap <leader>f :lua require('telescope.builtin').current_buffer_fuzzy_find()<CR>
 

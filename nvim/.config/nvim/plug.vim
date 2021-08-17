@@ -31,8 +31,6 @@ Plug 'tpope/vim-commentary'     " Commentary
 Plug 'ryanoasis/vim-devicons'   " Icon
 Plug 'kyazdani42/nvim-web-devicons' " Icons
 Plug 'honza/vim-snippets'       " Snippets
-Plug 'mhinz/vim-startify'       " Startify
-
 
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 Plug 'jiangmiao/auto-pairs' " Auto pairs and surround for '(' '[' '{' etc.

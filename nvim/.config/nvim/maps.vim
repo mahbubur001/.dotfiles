@@ -15,8 +15,8 @@ vnoremap < <gv
 vnoremap > >gv
 
 " Move to previous/next
-nnoremap <silent> <A-.> :BufferNext<CR>
-nnoremap <silent> <A-,> :BufferPrevious<CR>
+nnoremap <silent> <TAB> :BufferNext<CR>
+nnoremap <silent> <S-TAB> :BufferPrevious<CR>
 
 " Allow saving of files as sudo when I forgot to start vim using sudo.
 command W :execute ':silent w !sudo tee % > /dev/null' | :edit!
