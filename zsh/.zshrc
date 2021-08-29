@@ -77,7 +77,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-syntax-highlighting zsh-autosuggestions zsh-completions zsh-history-substring-search)
+plugins=(git vi-mode zsh-syntax-highlighting zsh-autosuggestions zsh-completions zsh-history-substring-search)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -106,6 +106,38 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# -------
+# Aliases
+# -------
+alias 🍺="git checkout -b drunk"
+alias a='code .'
+alias c='code .'
+alias reveal-md="reveal-md --theme night --highlight-theme hybrid --port 1337"
+alias ns='npm start'
+alias start='npm start'
+alias nr='npm run'
+alias run='npm run'
+alias nis='npm i -S'
+alias l="ls" # List files in current directory
+alias ll="ls -al" # List all files in current directory in long list format
+alias o="open ." # Open the current directory in Finder
+
+# ----------------------
+# Git Aliases
+# ----------------------
+alias ga='git add'
+alias gaa='git add .'
+alias gaaa='git add -A'
+alias gc='git commit'
+alias gcm='git commit -m'
+alias gd='git diff'
+alias gi='git init'
+alias gl='git log'
+alias gp='git pull'
+alias gpsh='git push'
+alias gss='git status -s'
+alias gs='git status'
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
