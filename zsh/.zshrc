@@ -137,8 +137,8 @@ alias gi='git init'
 alias gl='git log'
 alias gp='git pull'
 alias gpsh='git push'
-alias gss='git status -s'
-alias gs='git status'
+alias gs='git status -s'
+alias gss='git status'
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
