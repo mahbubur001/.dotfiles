@@ -9,7 +9,7 @@ fi
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/mahbubur/.oh-my-zsh"
+export ZSH=$HOME/.oh-my-zsh
 export PATH=$HOME/.composer/vendor/bin:$PATH
 
 # Set name of the theme to load --- if set to "random", it will
@@ -124,9 +124,9 @@ alias l="ls" # List files in current directory
 alias ll="ls -al" # List all files in current directory in long list format
 alias o="open ." # Open the current directory in Finder
 
-# ----------------------
-# Git Aliases
-# ----------------------
+# # ----------------------
+# # Git Aliases
+# # ----------------------
 alias ga='git add'
 alias gaa='git add .'
 alias gaaa='git add -A'
@@ -140,5 +140,6 @@ alias gpsh='git push'
 alias gs='git status -s'
 alias gss='git status'
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+# # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
