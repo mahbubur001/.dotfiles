@@ -143,7 +143,7 @@ alias gp='git pull'
 alias gpsh='git push'
 alias gs='git status -s'
 alias gss='git status'
-
+alias gagcgp='git add . && git commit && git push'
 # # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
