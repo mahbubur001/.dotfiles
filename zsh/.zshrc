@@ -128,6 +128,9 @@ alias l="ls" # List files in current directory
 alias ll="ls -al" # List all files in current directory in long list format
 alias o="open ." # Open the current directory in Finder
 
+
+alias v="nvim"
+
 # # ----------------------
 # # Git Aliases
 # # ----------------------
@@ -147,3 +150,4 @@ alias gagcgp='git add . && git commit && git push'
 # # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export PATH="/usr/local/opt/php@7.4/bin:$PATH"

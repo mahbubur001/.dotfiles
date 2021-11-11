@@ -3,9 +3,9 @@
 use PhpCsFixer\Config;
 
 $rules = [
-	'@PSR2'                    => true,
-	'array_syntax'             => ['syntax' => 'short'],
-	'binary_operator_spaces'   => [
+	'@PSR2'                          => true,
+	'array_syntax'                   => ['syntax' => 'short'],
+	'binary_operator_spaces'         => [
 		'default'   => 'single_space',
 		'operators' => [
 			'=>' => 'align',
@@ -103,6 +103,9 @@ $rules = [
 	'ordered_imports'                       => [
 		'sort_algorithm' => 'length',
 	],
+	'align_multiline_comment' => [
+		'comment_type' => 'all_multiline',
+	],
 	'php_unit_dedicate_assert'                      => ['target' => '5.6'],
 	'phpdoc_no_empty_return'                        => false,
 	'phpdoc_trim_consecutive_blank_line_separation' => true,
@@ -114,7 +117,7 @@ $rules = [
 	'phpdoc_separation'                             => true,
 	'phpdoc_single_line_var_spacing'                => true,
 	'phpdoc_summary'                                => true,
-	'phpdoc_to_comment'                             => true,
+	'phpdoc_to_comment'                             => false,
 	'phpdoc_tag_type'                               => true,
 	'phpdoc_trim'                                   => true,
 	'phpdoc_types'                                  => true,
