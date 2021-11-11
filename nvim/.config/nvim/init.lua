@@ -1,31 +1,34 @@
-local cmd = vim.cmd
-local fn = vim.fn
-local g = vim.g
-local opt = vim.opt
+vim.g.mapleader = " "
 
--- default options
-opt.completeopt = {'menu', 'menuone', 'noselect'}
-opt.mouse = 'a'
-opt.splitright = true
-opt.splitbelow = true
-opt.expandtab = true
-opt.tabstop = 4
-opt.shiftwidth = 4
-opt.number = true
-opt.ignorecase = true
-opt.smartcase = true
-opt.incsearch = true
--- set diffopt+=vertical " starts diff mode in vertical split
-opt.hidden = true
-opt.cmdheight = 1
--- set shortmess+=c " don't need to press enter so often
-opt.signcolumn = 'yes'
-opt.updatetime = 520
-opt.undofile = true
-cmd('filetype plugin on')
-opt.backup = false
-g.netrw_banner = false
-g.netrw_liststyle = 3
-g.markdown_fenced_languages = {'javascript', 'js=javascript', 'json=javascript'}
+-- Turn off builtin plugins I do not use.
+require "my.disable_builtin"
+require "my.plugins"
 
-require 
+require "my.options"
+local function map(mode, lhs, rhs, opts)
+    local options = {
+        noremap = true
+    }
+    if opts then
+        options = vim.tbl_extend('force', options, opts)
+    end
+    vim.api.nvim_set_keymap(mode, lhs, rhs, options)
+end
+
+map('n', '<C-e>', ':NvimTreeToggle<CR>', {
+    silent = true
+})
+
+local lsp_installer = require("nvim-lsp-installer")
+lsp_installer.on_server_ready(function(server)
+    local opts = {}
+
+    -- (optional) Customize the options passed to the server
+    -- if server.name == "tsserver" then
+    --     opts.root_dir = function() ... end
+    -- end
+
+    -- This setup() function is exactly the same as lspconfig's setup function.
+    -- Refer to https://github.com/neovim/nvim-lspconfig/blob/master/ADVANCED_README.md
+    server:setup(opts)
+end)
