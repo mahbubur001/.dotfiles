@@ -1,4 +1,5 @@
 .git
+*.DS_Store
 nvim/.config/nvim/sessions
 nvim/.config/nvim/undodir
 fish/.config/fish/fish_variables
