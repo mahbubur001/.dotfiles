@@ -42,14 +42,62 @@ local function plugins(use)
         requires = {"jose-elias-alvarez/nvim-lsp-ts-utils", "jose-elias-alvarez/null-ls.nvim", "folke/lua-dev.nvim",
                     "williamboman/nvim-lsp-installer"}
     }
+    use({
+        "hrsh7th/nvim-cmp",
+        event = "InsertEnter",
+        opt = true,
+        config = function()
+            require("config.compe")
+        end,
+        wants = {"LuaSnip"},
+        requires = {"hrsh7th/cmp-nvim-lsp", "hrsh7th/cmp-buffer", "hrsh7th/cmp-path", "saadparwaiz1/cmp_luasnip", {
+            "L3MON4D3/LuaSnip",
+            wants = "friendly-snippets",
+            config = function()
+                require("config.snippets")
+            end
+        }, "rafamadriz/friendly-snippets", {
+            "windwp/nvim-autopairs",
+            config = function()
+                require("config.autopairs")
+            end
+        }}
+    })
+
+    use({
+        "simrat39/symbols-outline.nvim",
+        cmd = {"SymbolsOutline"}
+    })
+
+    use({
+        "b3nj5m1n/kommentary",
+        opt = true,
+        wants = "nvim-ts-context-commentstring",
+        keys = {"gc", "gcc"},
+        config = function()
+            require("config.comments")
+        end,
+        requires = "JoosepAlviste/nvim-ts-context-commentstring"
+    })
+
+    use({
+        "nvim-treesitter/nvim-treesitter",
+        run = ":TSUpdate",
+        opt = true,
+        event = "BufRead",
+        requires = {{
+            "nvim-treesitter/playground",
+            cmd = "TSHighlightCapturesUnderCursor"
+        }, "nvim-treesitter/nvim-treesitter-textobjects", "RRethy/nvim-treesitter-textsubjects"},
+        config = [[require('config.treesitter')]]
+    })
 
     -- Theme: color schemes
     use {
-        "ellisonleao/gruvbox.nvim",
+        "folke/tokyonight.nvim",
         config = function()
-            require("config.gruvbox")
-        end,
-        requires = {"rktjmp/lush.nvim"}
+            require("config.theme")
+        end
     }
     -- Theme: icons
     use {
@@ -132,7 +180,7 @@ local function plugins(use)
         "akinsho/nvim-toggleterm.lua",
         keys = "<M-`>",
         config = function()
-            require("config.toggleterm")
+            require("config.terminal")
         end
     })
 

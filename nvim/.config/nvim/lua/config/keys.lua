@@ -121,6 +121,7 @@ local leader = {
         v = {"<cmd>Vista!!<CR>", "Vista"},
         o = {"<cmd>SymbolsOutline<cr>", "Symbols Outline"}
     },
+    ["e"] = {"<cmd>::NvimTreeToggle<CR>", "Toggle file tree"},
     b = {
         name = "+buffer",
         ["b"] = {"<cmd>:e #<cr>", "Switch to Other Buffer"},

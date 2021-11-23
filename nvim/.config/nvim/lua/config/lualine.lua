@@ -1,5 +1,5 @@
 local function clock()
-    return " " .. os.date("%H:%M")
+    return " " .. os.date("%I:%M %p")
 end
 
 local function lsp_progress(self, is_active)
