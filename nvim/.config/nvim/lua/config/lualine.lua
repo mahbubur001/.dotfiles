@@ -24,7 +24,8 @@ vim.cmd([[autocmd User LspProgressUpdate let &ro = &ro]])
 
 local config = {
     options = {
-        theme = "tokyonight",
+      --  theme = "tokyonight",
+        theme = "gruvbox-flat",
         section_separators = {
             left = "",
             right = ""

@@ -93,10 +93,16 @@ local function plugins(use)
     })
 
     -- Theme: color schemes
+--    use {
+--        "folke/tokyonight.nvim",
+--        config = function()
+--            require("config.theme")
+--        end
+--    }
     use {
-        "folke/tokyonight.nvim",
+        "eddyekofo94/gruvbox-flat.nvim",
         config = function()
-            require("config.theme")
+            require("config.gruvbox")
         end
     }
     -- Theme: icons

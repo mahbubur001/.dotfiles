@@ -78,7 +78,7 @@ util.inoremap(";", ";<c-g>u")
 -- vim.cmd([[cmap <C-R> <Plug>(TelescopeFuzzyCommandSearch)]])
 
 -- markdown
-util.nnoremap("=t", "<cmd>TableFormat<cr>")
+  util.nnoremap("=t", "<cmd>TableFormat<cr>")
 
 -- better indenting
 util.vnoremap("<", "<gv")
