@@ -35,6 +35,7 @@ alias gs='git status --short'
 # -------
 # Aliases
 # -------
+alias v="nvim"
 alias cp="cp -iv"
 alias c='code .'
 alias ns='npm start'
@@ -44,6 +45,7 @@ alias run='npm run'
 alias nis='npm i -S'
 alias o="open ." # Open the current directory in Finder
 command -qv nvim && alias vim nvim
+alias cds='find . -name '.DS_Store' -type f -delete'
 
 set -gx EDITOR nvim
 
