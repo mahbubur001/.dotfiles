@@ -229,7 +229,7 @@ local leader = {
     [" "] = "Find File",
     ["."] = {":Telescope file_browser<CR>", "Browse Files"},
     [","] = {"<cmd>Telescope buffers show_all_buffers=true<cr>", "Switch Buffer"},
-    ["/"] = {"<cmd>Telescope live_grep<cr>", "Search"},
+   -- ["/"] = {"<cmd>Telescope live_grep<cr>", "Search"},
     [":"] = {"<cmd>Telescope command_history<cr>", "Command History"},
     q = {
         name = "+quit/session",
