@@ -145,6 +145,14 @@ local function plugins(use)
         end
     })
 
+    use({
+      "mhartington/formatter.nvim",
+      config = function ()
+          require("config.formatter")
+      end
+    })
+
+
     -- Fuzzy finder
     use({
         "nvim-telescope/telescope.nvim",

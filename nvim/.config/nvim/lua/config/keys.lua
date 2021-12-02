@@ -78,7 +78,7 @@ util.inoremap(";", ";<c-g>u")
 -- vim.cmd([[cmap <C-R> <Plug>(TelescopeFuzzyCommandSearch)]])
 
 -- markdown
-  util.nnoremap("=t", "<cmd>TableFormat<cr>")
+util.nnoremap("=t", "<cmd>TableFormat<cr>")
 
 -- better indenting
 util.vnoremap("<", "<gv")
@@ -213,23 +213,10 @@ local leader = {
             util.toggle("number")
         end, "Line Numbers"}
     },
-    ["<tab>"] = {
-        name = "workspace",
-        ["<tab>"] = {"<cmd>tabnew<CR>", "New Tab"},
-
-        n = {"<cmd>tabnext<CR>", "Next"},
-        d = {"<cmd>tabclose<CR>", "Close"},
-        p = {"<cmd>tabprevious<CR>", "Previous"},
-        ["]"] = {"<cmd>tabnext<CR>", "Next"},
-        ["["] = {"<cmd>tabprevious<CR>", "Previous"},
-        f = {"<cmd>tabfirst<CR>", "First"},
-        l = {"<cmd>tablast<CR>", "Last"}
-    },
     ["`"] = {"<cmd>:e #<cr>", "Switch to Other Buffer"},
     [" "] = "Find File",
     ["."] = {":Telescope file_browser<CR>", "Browse Files"},
     [","] = {"<cmd>Telescope buffers show_all_buffers=true<cr>", "Switch Buffer"},
-   -- ["/"] = {"<cmd>Telescope live_grep<cr>", "Search"},
     [":"] = {"<cmd>Telescope command_history<cr>", "Command History"},
     q = {
         name = "+quit/session",
