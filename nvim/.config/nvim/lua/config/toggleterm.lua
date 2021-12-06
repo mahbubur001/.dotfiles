@@ -9,9 +9,3 @@ require("toggleterm").setup({
     persist_size = true,
     direction = "horizontal"
 })
-
--- Hide number column for
--- vim.cmd [[au TermOpen * setlocal nonumber norelativenumber]]
-
--- Esc twice to get to normal mode
-vim.cmd([[tnoremap <esc><esc> <C-\><C-N>]])

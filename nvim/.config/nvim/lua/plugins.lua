@@ -93,12 +93,12 @@ local function plugins(use)
     })
 
     -- Theme: color schemes
---    use {
---        "folke/tokyonight.nvim",
---        config = function()
---            require("config.theme")
---        end
---    }
+    --    use {
+    --        "folke/tokyonight.nvim",
+    --        config = function()
+    --            require("config.theme")
+    --        end
+    --    }
     use {
         "eddyekofo94/gruvbox-flat.nvim",
         config = function()
@@ -146,12 +146,11 @@ local function plugins(use)
     })
 
     use({
-      "mhartington/formatter.nvim",
-      config = function ()
-          require("config.formatter")
-      end
+        "mhartington/formatter.nvim",
+        config = function()
+            require("config.formatter")
+        end
     })
-
 
     -- Fuzzy finder
     use({
@@ -192,9 +191,8 @@ local function plugins(use)
     -- Terminal
     use({
         "akinsho/nvim-toggleterm.lua",
-        keys = "<M-`>",
         config = function()
-            require("config.terminal")
+            require("config.toggleterm")
         end
     })
 

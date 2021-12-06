@@ -37,8 +37,8 @@ util.vnoremap("<A-k>", ":m '<-2<CR>gv=gv")
 util.inoremap("<A-k>", "<Esc>:m .-2<CR>==gi")
 
 -- Switch buffers with tab
-util.nnoremap("<C-Left>", ":bprevious<cr>")
-util.nnoremap("<C-Right>", ":bnext<cr>")
+util.nnoremap("<C-S-Tab>", ":bprevious<cr>")
+util.nnoremap("<C-Tab>", ":bnext<cr>")
 
 -- Easier pasting
 util.nnoremap("[p", ":pu!<cr>")
@@ -96,6 +96,20 @@ vim.api.nvim_exec([[
   xnoremap * :<C-u>call g:VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
   xnoremap # :<C-u>call g:VSetSearch('?')<CR>?<C-R>=@/<CR><CR>
 ]], false)
+local Terminal = require('toggleterm.terminal').Terminal
+local toggle_float = function()
+    local float = Terminal:new({
+        direction = "float"
+    })
+    return float:toggle()
+end
+local toggle_lazygit = function()
+    local lazygit = Terminal:new({
+        cmd = 'lazygit',
+        direction = "float"
+    })
+    return lazygit:toggle()
+end
 
 local leader = {
     ["w"] = {
@@ -200,20 +214,10 @@ local leader = {
         b = {":Telescope file_browser cwd=~/projects<CR>", "Browse ~/projects"}
     },
     t = {
-        name = "toggle",
-        f = {require("config.lsp.formatting").toggle, "Format on Save"},
-        s = {function()
-            util.toggle("spell")
-        end, "Spelling"},
-        w = {function()
-            util.toggle("wrap")
-        end, "Word Wrap"},
-        n = {function()
-            util.toggle("relativenumber", true)
-            util.toggle("number")
-        end, "Line Numbers"}
+        t = {":ToggleTerm<cr>", "Split Below"},
+        f = {toggle_float, "Floating Terminal"},
+        l = {toggle_lazygit, "LazyGit"}
     },
-    ["`"] = {"<cmd>:e #<cr>", "Switch to Other Buffer"},
     [" "] = "Find File",
     ["."] = {":Telescope file_browser<CR>", "Browse Files"},
     [","] = {"<cmd>Telescope buffers show_all_buffers=true<cr>", "Switch Buffer"},

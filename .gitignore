@@ -1,7 +1,3 @@
-.git
-*.DS_Store
-nvim/.config/nvim/sessions
 nvim/.config/nvim/plugin/packer_compiled.lua
-nvim/.config/nvim/undodir
-fish/.config/fish/fish_variables
-
+.gitignore
+nvim/.config/nvim/sessions/
