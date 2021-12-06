@@ -1,0 +1,10 @@
+[user]
+	name = Mahbubur Rahman
+	email = mahbubur001@gmail.com
+[core]
+    editor = nvim
+    excludesfile = ~/.gitignore_global
+[pull]
+    ff = only
+[init]
+	defaultBranch = main

@@ -72,3 +72,5 @@ function __check_rvm --on-variable PWD --description 'Do nvm stuff'
   else
   end
 end
+fish_add_path /usr/local/sbin
+fish_add_path /usr/local/sbin
