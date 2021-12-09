@@ -115,6 +115,7 @@ source $ZSH/oh-my-zsh.sh
 # -------
 # Aliases
 # -------
+alias ls="exa -a --long --icons"
 alias 🍺="git checkout -b drunk"
 alias a='code .'
 alias c='code .'
