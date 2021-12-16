@@ -17,10 +17,10 @@ wk.setup({
 })
 
 -- Move to window using the <ctrl> movement keys
-util.nmap("<left>", "<C-w>h")
-util.nmap("<down>", "<C-w>j")
-util.nmap("<up>", "<C-w>k")
-util.nmap("<right>", "<C-w>l")
+-- util.nmap("<M-left>", "<C-w>h")
+-- util.nmap("<A-down>", "<C-w>j")
+-- util.nmap("<A-up>", "<C-w>k")
+-- util.nmap("<M-right>", "<C-w>l")
 
 -- Resize window using <ctrl> arrow keys
 util.nnoremap("<S-Up>", ":resize +2<CR>")
@@ -29,12 +29,12 @@ util.nnoremap("<S-Left>", ":vertical resize -2<CR>")
 util.nnoremap("<S-Right>", ":vertical resize +2<CR>")
 
 -- Move Lines
-util.nnoremap("<A-j>", ":m .+1<CR>==")
-util.vnoremap("<A-j>", ":m '>+1<CR>gv=gv")
-util.inoremap("<A-j>", "<Esc>:m .+1<CR>==gi")
-util.nnoremap("<A-k>", ":m .-2<CR>==")
-util.vnoremap("<A-k>", ":m '<-2<CR>gv=gv")
-util.inoremap("<A-k>", "<Esc>:m .-2<CR>==gi")
+util.nnoremap("<Alt-Down>", ":m .+1<CR>==")
+util.vnoremap("<Alt-Down>", ":m '>+1<CR>gv=gv")
+util.inoremap("<Alt-Down>", "<Esc>:m .+1<CR>==gi")
+util.nnoremap("<Alt-Up>", ":m .-2<CR>==")
+util.vnoremap("<Alt-Up>", ":m '<-2<CR>gv=gv")
+util.inoremap("<Alt-Up>", "<Esc>:m .-2<CR>==gi")
 
 -- Switch buffers with tab
 util.nnoremap("<C-S-Tab>", ":bprevious<cr>")

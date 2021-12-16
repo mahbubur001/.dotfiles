@@ -15,9 +15,9 @@ require('formatter').setup({
 
 -- vim.cmd('autocmd BufWritePost * FormatWrite')
 
-vim.api.nvim_exec([[
-augroup FormatAutogroup
-  autocmd!
-  autocmd BufWritePost * FormatWrite
-augroup END
-]], true)
+-- vim.api.nvim_exec([[
+-- augroup FormatAutogroup
+--   autocmd!
+--   autocmd BufWritePost * FormatWrite
+-- augroup END
+-- ]], true)

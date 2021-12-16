@@ -1,22 +1,9 @@
--- vim.g.nvim_tree_ignore = { ".git", "node_modules" }
--- vim.g.nvim_tree_gitignore = 1
--- vim.g.nvim_tree_auto_open = 1
--- vim.g.nvim_tree_auto_close = 1
--- vim.g.nvim_tree_follow = 1
--- vim.g.nvim_tree_auto_ignore_ft = { "dashboard", "startify" }
--- vim.g.nvim_tree_indent_markers = 1
--- vim.g.nvim_tree_git_hl = 1
--- vim.g.nvim_tree_disable_netrw = 0
--- vim.g.nvim_tree_lsp_diagnostics = 1
 require("nvim-tree.events").on_nvim_tree_ready(function()
     vim.cmd("NvimTreeRefresh")
 end)
 
--- following options are the default
 require("nvim-tree").setup({
-    -- disables netrw completely
     disable_netrw = true,
-    -- hijack netrw window on startup
     hijack_netrw = true,
     -- open the tree when running this setup function
     open_on_setup = false,
@@ -72,7 +59,7 @@ require("nvim-tree").setup({
         -- height of the window, can be either a number (columns) or a string in `%`, for top or bottom side placement
         height = 30,
         -- side of the tree, can be one of 'left' | 'right' | 'top' | 'bottom'
-        side = "right",
+        side = "left",
         -- if true the tree will resize itself after opening a file
         auto_resize = true,
         mappings = {
