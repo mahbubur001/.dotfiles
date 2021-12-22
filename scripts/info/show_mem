@@ -1,0 +1,533 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC2048,SC2086
+
+has()
+{
+    if type -p "$1" > /dev/null 2>&1; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+print_stdout()
+{
+    [[ "${title}" ]] && printf "%s\\n" "${title}"
+    [[ "${subtitle}" ]] && printf "%s\\n" "${subtitle}"
+    [[ "${message}" ]] && printf "%s\\n" "${message}"
+}
+
+notify()
+{
+    [[ "${title}" =~ (^( \| ))|(( \| )$) ]] && {
+        title="${title##' | '}"
+        title="${title%%' | '}"
+    }
+
+    [[ "${subtitle}" =~ (^( \| ))|(( \| )$) ]] && {
+        subtitle="${subtitle##' | '}"
+        subtitle="${subtitle%%' | '}"
+    }
+
+    [[ "${message}" =~ (^( \| ))|(( \| )$) ]] && {
+        message="${message##' | '}"
+        message="${message%%' | '}"
+    }
+
+    if [[ "${out}" == "stdout" ]]; then
+        print_stdout
+    else
+        if has "notify-send" || has "osascript"; then
+            if [[ "${subtitle}" && "${message}" ]]; then
+                body="${subtitle}\\n${message}"
+            elif [[ ! "${subtitle}" || ! "${message}" ]]; then
+                body+="${subtitle}"
+                body+="${message}"
+            else
+                body=""
+            fi
+
+            case "${os}" in
+                "MacOS")
+                    script="display notification \"${message}\" \
+                            with title \"${title}\" \
+                            subtitle \"${subtitle}\""
+                    /usr/bin/env osascript <<< "${script}"
+                ;;
+
+                "Linux")
+                    notify-send --icon=dialog-information "${title}" "${body}"
+                ;;
+            esac
+        else
+            print_stdout
+        fi
+    fi
+}
+
+trim()
+{
+    [[ "$*" ]] && {
+        set -f
+        set -- $*
+        printf "%s" "${*//\"}"
+        set +f
+    }
+}
+
+percent()
+{
+    [[ "$1" && "$2" ]] && (($(awk -v a="$2" 'BEGIN { printf "%d", (a > 0) }'))) && \
+        awk -v a="$1" -v b="$2" 'BEGIN { printf "%f", (a / b) * 100 }'
+}
+
+div()
+{
+    [[ "$1" && "$2" ]] && (($(awk -v a="$2" 'BEGIN { printf "%d", (a != 0) }'))) && \
+        awk -v a="$1" -v b="$2" 'BEGIN { printf "%f", a / b }'
+}
+
+round()
+{
+    [[ "$1" && "$2" ]] && \
+        printf "%.*f" "$1" "$2"
+}
+
+_get_function_from_string()
+{
+    declare -A uniq
+    local regex='(\{)([a-zA-Z_]+)'
+    local str="$1"
+    local -a func
+
+    while [[ "${str}" =~ ${regex} ]]; do
+        [[ ! "${uniq[${BASH_REMATCH[2]}]}" ]] && {
+            uniq[${BASH_REMATCH[2]}]="1"
+            func+=("${BASH_REMATCH[2]}")
+        }
+        str="${str/${BASH_REMATCH[2]}}"
+    done
+
+    printf "%s\\n" "${func[@]}"
+}
+
+make_string()
+{
+    local str="$1"
+    local out="${str}"
+    local -a func
+
+    mapfile -t func < <(_get_function_from_string "${str}")
+
+    for function in "${func[@]}"; do
+        token_match="\\{(${function})((\\?)([^\\{]*(\\{(${function})?\\})[^\\}]*))?\\}"
+
+        if [[ "${mem_info[${function}]}" ]]; then
+            [[ "${out}" =~ ${token_match} ]]
+            if [[ "${BASH_REMATCH[2]}" ]]; then
+                token="${BASH_REMATCH[0]}"
+                token="${token/${BASH_REMATCH[5]}/${mem_info[${function}]}}"
+                token="${token/\{${BASH_REMATCH[1]}\?}"
+                token="${token%\}}"
+                out="${out/${BASH_REMATCH[0]}/${token}}"
+            else
+                out="${out/${BASH_REMATCH[0]}/${mem_info[${function}]}}"
+            fi
+        else
+            [[ "${out}" =~ ${token_match} ]]
+            out="${out/${BASH_REMATCH[0]}}"
+        fi
+    done
+
+    printf "%s" "${out}"
+}
+
+get_os()
+{
+    case "${OSTYPE:-$(uname -s)}" in
+        "Darwin"|"darwin"*) os="MacOS" ;;
+        "Linux"|"linux"*) os="Linux" ;;
+        "FreeBSD"|"freebsd"*) os="FreeBSD" ;;
+    esac
+}
+
+get_mem_percent()
+{
+    [[ "${mem_percent}" && "${mem_info[mem_percent]}" ]] && \
+        return
+
+    [[ ! "${mem_info[mem_total]}" ]] && \
+        get_mem_total
+    [[ ! "${mem_info[mem_used]}" ]] && \
+        get_mem_used
+
+    mem_percent="$(percent "${mem_info[mem_used]/${prefix:-MiB}}" "${mem_info[mem_total]/${prefix:-MiB}}")"
+    mem_percent="$(round "2" "${mem_percent}")"
+    [[ "${mem_percent}" =~ \.(0+)$ ]] && \
+        mem_percent="${mem_percent/.*}"
+
+    mem_info[mem_percent]="${mem_percent}%"
+}
+
+get_mem_used()
+{
+    [[ "${mem_used}" && "${mem_info[mem_used]}" ]] && \
+        return
+
+    case "${os}" in
+        "MacOS")
+            pow="2"
+            while IFS=":" read -r a b; do
+                [[ "$a" =~ ' '(wired|active|occupied) ]] && \
+                    ((mem_used += ${b/.}))
+            done < <(vm_stat)
+            ((mem_used *= 4096))
+        ;;
+
+        "Linux")
+            pow="1"
+            while read -r a b _; do
+                case "${a/:}" in
+                    "MemTotal") mem_used="$b" ;;
+                    "Shmem") ((mem_used += b)) ;;
+                    "MemFree"|"Buffers"|"Cached"|"SReclaimable")
+                        ((mem_used -= b))
+                    ;;
+                esac
+            done < /proc/meminfo
+        ;;
+
+        "FreeBSD")
+            [[ ! "${mem_info[mem_total]}" ]] && \
+                get_mem_total
+
+            pow="2"
+            pagesize="$(sysctl -n hw.pagesize)"
+            mem_used="$((
+                $(sysctl -n hw.realmem) -
+                ($(sysctl -n vm.stats.vm.v_inactive_count) * pagesize) -
+                ($(sysctl -n vm.stats.vm.v_free_count) * pagesize) -
+                ($(sysctl -n vm.stats.vm.v_cache_count) * pagesize)
+            ))"
+        ;;
+    esac
+
+    case "${prefix}" in
+        "GiB") ((pow++)) ;;
+        *) prefix="MiB" ;;
+    esac
+
+    mem_used="$(div "${mem_used}" "$((1024 ** pow))")"
+    mem_used="$(round "${rounding:-0}" "${mem_used}")"
+    [[ "${mem_used}" =~ \.(0+)$ ]] && \
+        mem_used="${mem_used/.*}"
+
+    mem_info[mem_used]="${mem_used} ${prefix:-MiB}"
+}
+
+get_mem_total()
+{
+    [[ "${mem_total}" && "${mem_info[mem_total]}" ]] && \
+        return
+
+    case "${os}" in
+        "MacOS")
+            pow="2"
+            mem_total=$(sysctl -n hw.memsize)
+        ;;
+
+        "Linux")
+            pow="1"
+            while [[ ! "${mem_total}" ]] && read -r a b _; do
+                [[ "$a" =~ 'MemTotal' ]] && \
+                    mem_total="$b"
+            done < /proc/meminfo
+        ;;
+
+        "FreeBSD")
+            pow="2"
+            mem_total="$(sysctl -n hw.realmem)"
+        ;;
+    esac
+
+    case "${prefix}" in
+        "GiB") ((pow++)) ;;
+        *) prefix="MiB" ;;
+    esac
+
+    mem_total="$(div "${mem_total}" "$((1024 ** pow))")"
+    mem_total="$(round "${rounding:-0}" "${mem_total}")"
+    [[ "${mem_total}" =~ \.(0+)$ ]] && \
+        mem_total="${mem_total/.*}"
+
+    mem_info[mem_total]="${mem_total} ${prefix:-MiB}"
+}
+
+get_swap_percent()
+{
+    [[ "${swap_percent}" && "${mem_info[swap_percent]}" ]] && \
+        return
+
+    [[ ! "${mem_info[swap_total]}" ]] && \
+        get_swap_total
+    [[ ! "${mem_info[swap_used]}" ]] && \
+        get_swap_used
+
+    swap_percent="$(percent "${mem_info[swap_used]/${prefix:-MiB}}" "${mem_info[swap_total]/${prefix:-MiB}}")"
+    swap_percent="$(round "2" "${swap_percent}")"
+    [[ "${swap_percent}" =~ \.(0+)$ ]] && \
+        swap_percent="${swap_percent/.*}"
+
+    mem_info[swap_percent]="${swap_percent}%"
+}
+
+get_swap_used()
+{
+    [[ "${swap_used}" && "${mem_info[swap_used]}" ]] && \
+        return
+
+    case "${os}" in
+        "MacOS")
+            pow="0"
+            read -r _ _ _ _ _ swap_used _ < <(sysctl -n vm.swapusage)
+            swap_used="${swap_used/M}"
+        ;;
+
+        "Linux")
+            pow="1"
+            while [[ ! "${swap_used}" ]] && read -r a b _; do
+                if [[ "$a" =~ 'SwapTotal' ]]; then
+                    tmp="$b"
+                elif [[ "$a" =~ 'SwapFree' ]]; then
+                    ((swap_used = tmp - b))
+                fi
+            done < /proc/meminfo
+        ;;
+
+        "FreeBSD")
+            pow="2"
+            swap_used="0"
+
+            while read -r _ _ a _; do
+                [[ "$a" == "Used" ]] && \
+                    ((swap_used += a))
+            done < <(pstat -s)
+        ;;
+    esac
+
+    case "${prefix}" in
+        "GiB") ((pow++));;
+        *) prefix="MiB" ;;
+    esac
+
+    swap_used="$(div "${swap_used}" "$((1024 ** pow))")"
+    swap_used="$(round "${rounding:-0}" "${swap_used}")"
+    [[ "${swap_used}" =~ \.(0+)$ ]] && \
+        swap_used="${swap_used/.*}"
+
+    mem_info[swap_used]="${swap_used} ${prefix:-MiB}"
+}
+
+get_swap_total()
+{
+    [[ "${swap_total}" && "${mem_info[swap_total]}" ]] && \
+        return
+
+    case "${os}" in
+        "MacOS")
+            pow="0"
+            read -r _ _ swap_total _ < <(sysctl -n vm.swapusage)
+            swap_total="${swap_total/M}"
+        ;;
+
+        "Linux")
+            pow="1"
+            while [[ ! "${swap_total}" ]] && read -r a b _; do
+                [[ "$a" =~ 'SwapTotal' ]] && \
+                    swap_total="$b"
+            done < /proc/meminfo
+        ;;
+
+        "FreeBSD")
+            pow="2"
+            swap_total="$(sysctl -n vm.swap_total)"
+        ;;
+    esac
+
+    case "${prefix}" in
+        "GiB") ((pow++));;
+        *) prefix="MiB" ;;
+    esac
+
+    swap_total="$(div "${swap_total}" "$((1024 ** pow))")"
+    swap_total="$(round "${rounding:-0}" "${swap_total}")"
+    [[ "${swap_total}" =~ \.(0+)$ ]] && \
+        swap_total="${swap_total/.*}"
+
+    mem_info[swap_total]="${swap_total} ${prefix:-MiB}"
+}
+
+print_usage()
+{
+    printf "%s\\n" "
+Usage: ${0##*/} info_name --option --option [value] ...
+
+Options:
+    --stdout            Print to stdout
+    --json              Print in json format
+    --round \"num\"       Round decimals to \"num\" places
+    --prefix [MiB|GiB]  Output values using selected prefix
+    -r, --raw           Print in csv format
+    -h, --help          Show this message
+
+Info:
+    info_name           Print the output of func_name
+
+Valid Names:
+    mem_percent
+    mem_used
+    mem_total
+    swap_percent
+    swap_used
+    swap_total
+
+Output:
+    -f, --format \"str\"    Print info_name in a formatted string
+                          Used in conjuction with info_name
+
+Syntax:
+    {}  Output of info_name
+
+Examples:
+    Print all information as a notification:
+    \$ ${0##*/}
+
+    Print to standard out:
+    \$ ${0##*/} --stdout
+
+    Print memory usage:
+    \$ ${0##*/} mem_used mem_total
+
+    Print swap usage with a format string:
+    \$ ${0##*/} --format '{swap_used} | {swap_total}'
+
+Misc:
+    If notify-send is not installed, then the script will
+    print to standard output.
+"
+}
+
+get_args()
+{
+    while (($# > 0)); do
+        case "$1" in
+            "--stdout") : "${out:=stdout}" ;;
+            "--json") : "${out:=json}" ;;
+            "--prefix") [[ "$2" ]] && { : "${prefix:=$2}"; shift; } ;;
+            "--round") [[ "$2" ]] && { : "${rounding:=$2}"; shift; } ;;
+            "-r"|"--raw") : "${out:=raw}" ;;
+            "-f"|"--format")
+                [[ "$2" ]] && {
+                    : "${out:=string}"
+                    str_format="$2"
+
+                    tmp="${str_format}"
+                    regex='\{([a-zA-Z_]+)\?[^\{]*\{([a-zA-Z_]+)}'
+
+                    # String validation
+                    while [[ "${tmp}" =~ ${regex} ]]; do
+                        tmp="${tmp/${BASH_REMATCH[0]}}"
+                        [[ "${BASH_REMATCH[1]}" != "${BASH_REMATCH[2]}" ]] && {
+                            printf "Invalid format: %s != %s\\n" \
+                                   "${BASH_REMATCH[1]}" \
+                                   "${BASH_REMATCH[2]}" >&2
+                            exit 1
+                        }
+                    done
+
+                    mapfile -t func < <(_get_function_from_string "${str_format}")
+                    shift
+                }
+            ;;
+
+            "-h"|"--help") print_usage; exit ;;
+            *)
+                : "${out:=string}"
+                func+=("$1")
+            ;;
+        esac
+        shift
+    done
+}
+
+main()
+{
+    declare -A mem_info
+    get_args "$@"
+    get_os
+
+    [[ ! "${func[*]}" ]] && \
+        func=(
+            "mem_used" "mem_total" "mem_percent"
+            "swap_used" "swap_total" "swap_percent"
+        )
+
+    for function in "${func[@]}"; do
+        [[ "$(type -t "get_${function}")" == "function" ]] && \
+            "get_${function}"
+    done
+
+    [[ ! "${str_format}" ]] && \
+        for i in "${!func[@]}"; do
+            [[ ! "${mem_info[${func[$i]}]}" ]] && \
+                unset 'func[$i]'
+        done
+
+    [[ ! "${func[*]}" ]] && \
+        exit 1
+
+    case "${out}" in
+        "raw")
+            raw="${func[0]}:${mem_info[${func[0]}]}"
+            for function in "${func[@]:1}"; do
+                raw="${raw},${function}:${mem_info[${function}]}"
+            done
+            printf "%s\\n" "${raw}"
+        ;;
+
+        "json")
+            printf "{\\n"
+            for function in "${func[@]::${#func[@]} - 1}"; do
+                printf "    \"%s\": \"%s\",\\n" "${function}" "${mem_info[${function}]}"
+            done
+
+            last="${func[*]:(-1):1}"
+            printf "    \"%s\": \"%s\"\\n" "${last}" "${mem_info[${last}]}"
+            printf "}\\n"
+        ;;
+
+        "string")
+            if [[ "${str_format}" ]]; then
+                printf "%s" "$(make_string "${str_format}")"
+            else
+                for function in "${func[@]}"; do
+                    printf "%s\\n" "${mem_info[${function}]}"
+                done
+            fi
+        ;;
+
+        *)
+            title_fmt="Memory{mem_percent? ({})}"
+            subtitle_fmt="{mem_used?{} | }{mem_total}"
+            message_fmt="{swap_used?{} | }{swap_total}"
+
+            title="$(make_string "${title_fmt}")"
+            subtitle="$(make_string "${subtitle_fmt}")"
+            message="$(make_string "${message_fmt}")"
+
+            notify
+        ;;
+    esac
+}
+
+main "$@"

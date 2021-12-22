@@ -1,0 +1,330 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC2030,SC2031,SC2194
+
+get_full_path()
+(
+    target="$1"
+    filename="${target##*/}"
+
+    [[ "${filename}" == "${target}" ]] && \
+        target="./${target}"
+    target="${target%/*}"
+    cd "${target}" || exit
+    full_path="${PWD}/${filename}"
+
+    printf "%s" "${full_path}"
+)
+
+check_file()
+(
+    [[ "${exclude[*]}" ]] && {
+        for pattern in "${exclude[@]}"; do
+            [[ $1 =~ ${pattern} ]] && \
+                exit_code="true"
+        done
+    }
+
+    [[ "${exit_code}" || ! -e "$1" || -d "$1" ]] && \
+        exit_code="true"
+
+    if [[ "${exit_code}" == "true" ]]; then
+        return 1
+    else
+        return 0
+    fi
+)
+
+_count_lines()
+(
+    file_path="$1"
+
+    if ((BASH_VERSINFO[0] < 4)); then
+        while IFS=$'\n' read -r _line; do
+            line+=("${_line}")
+        done < "${file_path}"
+    else
+        mapfile -t line < "${file_path}"
+    fi
+
+    if [[ "${character}" == "true" ]]; then
+        raw_file="$(< "${file_path}")"
+        char_count="${#raw_file}"
+        out="${char_count}"
+    elif [[ "${word}" == "true" ]]; then
+        IFS=" " read -ra words <<< "${line[@]}"
+        word_count="${#words[@]}"
+        out="${word_count}"
+    else
+        line_count="${#line[@]}"
+        out="${line_count}"
+    fi
+
+    [[ "${display_full}" == "true" ]] && \
+        file_path="$(get_full_path "${file_path}")"
+
+    out+=",${file_path}"
+
+    printf "%s\\n" "${out}"
+)
+
+reverse_array()
+(
+    for i in "$@"; do
+        temp_arr=("${i}" "${temp_arr[@]}")
+    done
+    printf "%s\\n" "${temp_arr[@]}"
+)
+
+_qsort()
+{
+    (($# == 0)) && {
+        unset qreturn
+        return
+    }
+
+    local pivot="$1"; shift
+    local i
+    local -a higher
+    local -a lower
+
+    for i in "$@"; do
+        if ((${i%%,*} < ${pivot%%,*})); then
+            lower+=("$i")
+        else
+            higher+=("$i")
+        fi
+    done
+
+    _qsort "${higher[@]}"
+    higher=("${qreturn[@]}")
+
+    _qsort "${lower[@]}"
+    qreturn+=("${pivot}" "${higher[@]}")
+}
+
+qsort()
+(
+    qreturn=()
+    _qsort "$@"
+    printf "%s\\n" "${qreturn[@]}"
+)
+
+print_padding()
+(
+    arr=("$@")
+
+    [[ "${sort}" == "true" ]] && {
+        if ((BASH_VERSINFO[0] < 4)); then
+            IFS=$'\n' read -d "" -ra arr < <(qsort "${arr[@]}")
+        else
+            mapfile -t arr < <(qsort "${arr[@]}")
+        fi
+    }
+
+    [[ "${reverse}" == "true" ]] && \
+        mapfile -t arr < <(reverse_array "${arr[@]}")
+
+    [[ "${display_num}" ]] && \
+        arr=("${arr[@]:0:${display_num}}")
+
+    for i in "${arr[@]}"; do
+        IFS=$'\n' read -d "" -r count name <<< "${i//,/$'\n'}"
+
+        ((count >= ${max_count:=0})) && {
+            max_count="${count}"
+            max_filename="${name}"
+        }
+
+        ((padding = ${#count} >= ${padding:=0} ? ${#count} : padding))
+
+        count_arr+=("${count}")
+        name_arr+=("${name}")
+        ((total_count+=count))
+    done
+
+    for ((i=0; i < ${#arr[@]}; i++)); do
+        out+=("$(printf "%-${padding}s%s%s" "${count_arr[$i]}" "${sep:- }" "${name_arr[$i]}")")
+    done
+
+    printf "%s\\n" "${out[@]}"
+
+    ((${#arr[@]} != 1)) && {
+        [[ "${display_total}" == "true" ]] && \
+            case "true" in
+                "${character}") printf "\\n%s\\n" "Total no. of characters: ${total_count}" ;;
+                "${word}") printf "\\n%s\\n" "Total no. of words: ${total_count}" ;;
+                *) printf "\\n%s\\n" "Total no. of lines: ${total_count}" ;;
+            esac
+
+        [[ "${display_top}" == "true" ]] && {
+            printf "%s\\n" "Longest file:"
+            printf "%-4s%s\\n" "" "${max_filename}"
+            case "true" in
+                "${character}") printf "%-4s%s\\n" "" "${max_count} characters" ;;
+                "${word}") printf "%-4s%s\\n" "" "${max_count} words" ;;
+                *) printf "%-4s%s\\n" "" "${max_count} lines" ;;
+            esac
+        }
+
+        printf "\\n"
+    }
+)
+
+print_example()
+(
+    less < <(printf "%s" "Showing number of lines in current directory:
+    $ $0
+    $ $0 .
+    $ $0 ./*
+
+Show the number of lines in a directory:
+    $ $0 /path/to/dir
+    $ $0 /path/to/dir/*
+
+Show the number of lines in current directory recursively:
+    $ $0 -rr
+    $ $0 -rr .
+
+    $ $0 --recursive
+    $ $0 --recursive .
+
+Show the number of lines in a directory recursively:
+    $ $0 -rr /path/to/dir
+
+    If globstar is enabled (shopt -s globstar)
+    Note: Bash will complain if there's too many files
+    $ $0 /path/to/dir/**/*
+
+Show the number or lines sorted from shortest to longest
+    $ $0 --sort
+    $ $0 -ss
+
+Show the number of lines sorted from longest to shortest
+    $ $0 -ss -r
+    $ $0 -ss --reverse
+
+Show the top 5 shortest files
+    $ $0 -ss -n 5
+
+Show the top 5 longest files
+    $ $0 -ss -r -n 5
+
+Show the total number of lines
+    $ $0 -t
+    $ $0 --total
+
+Show details on the longest file
+    $ $0 -tt
+    $ $0 --top
+
+Show the total number of files and details on the longest file
+    $ $0 -t -tt
+    $ $0 --total --top
+
+Show the number of lines of files without \"foobar\" in the path name
+    $ $0 --exclude \"foobar\"
+    $ $0 -e \"foobar\"
+
+Show the number of lines of files without \"foo\", \"bar\" and \"baz\"
+    $ $0 -e 'foo' 'bar' 'baz'
+    $ $0 -e 'foo|bar|baz'
+")
+)
+
+print_usage()
+(
+    printf "%s\\n" "
+Usage: ${0##*/} -o --option --option \"VALUE\"
+
+    Options:
+
+    [-r|--reverse]              Reverse the order of the list
+    [-n|--number \"num\"]         Show n amount of files
+    [-t|--total]                Show the total number of lines
+    [-e|--exclude]              Don't show any files containing
+                                this regex pattern
+    [-f|--full-path]            Show the file's full path instead
+                                of the relative path
+    [-s|--seperator \"sep\"]      Use character as a seperator
+                                between line count and file name
+    [-c|--character]            Count characters alongside lines
+    [-w|--word]                 Count words alongside lines
+
+    [-rr|--recursive]           Include files from subfolders
+    [-tt|--top]                 Show the longest file and lines
+    [-ss|--sort]                Sort by lowest to highest
+
+    [-ee|--example]             Show examples
+    [-h|--help]                 Show this message
+
+    This bash script will list the number of lines
+    a file contains. If no arguments are passed, then
+    it will use the files in the current directory.
+"
+)
+
+get_args()
+{
+    while (($# > 0)); do
+        case "$1" in
+            "-r"|"--reverse")       reverse="true" ;;
+            "-n"|"--number")        display_num="$2"; shift ;;
+            "-t"|"--total")         display_total="true" ;;
+            "-f"|"--full-path")     display_full="true" ;;
+            "-e"|"--exclude")
+                e_flag="true"
+                shift
+                for i in "$@"; do
+                    case "$1" in
+                        "-"*)   break ;;
+                        *)      exclude+=("$1"); shift ;;
+                    esac
+                done
+            ;;
+
+            "-s"|"--seperator")     sep=" $2 "; shift ;;
+            "-c"|"--character")     character="true" ;;
+            "-w"|"--word")          word="true" ;;
+            "-rr"|"--recursive")    recursive="true" ;;
+            "-tt"|"--top")          display_top="true" ;;
+            "-ss"|"--sort")         sort="true" ;;
+            "-ee"|"--example")      print_example; exit ;;
+            "-h"|"--help")          print_usage; exit ;;
+            *)
+                [[ -e "$1" ]] && \
+                    file_list+=("${1%/}")
+            ;;
+        esac
+
+        if [[ "${e_flag}" == "true" ]]; then
+            e_flag="false"
+        else
+            shift
+        fi
+    done
+
+    [[ ! "${file_list[*]}" || -d "${file_list[*]}" ]] && {
+        if [[ "${recursive}" == "true" ]]; then
+            shopt -s globstar
+            file_list=("${file_list[*]:-.}"/**/*)
+            shopt -u globstar
+        else
+            file_list=("${file_list[*]:-.}"/*)
+        fi
+    }
+}
+
+main()
+(
+    get_args "$@"
+
+    for i in "${file_list[@]}"; do
+        check_file "$i" && \
+            output+=("$(_count_lines "$i")")
+    done
+
+    [[ "${output[*]}" ]] && \
+        print_padding "${output[@]}"
+)
+
+main "$@"

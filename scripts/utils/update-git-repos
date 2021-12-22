@@ -1,0 +1,140 @@
+#!/usr/bin/env -S python3 -B
+# vim: syntax=python
+# pylint: disable=invalid-name
+
+""" Performs a git pull on a folder of git repositories """
+
+from abc import ABC, abstractmethod
+from os import chdir, devnull
+from pathlib import Path
+from re import findall
+from shutil import get_terminal_size
+from subprocess import call, PIPE, run
+from sys import argv
+from typing import List, Tuple, Callable
+
+
+class Git(ABC):
+    """ Abstract Git class """
+
+    @staticmethod
+    def get_runner():
+        """
+        Constructs an instance depending on the version of git installed
+        """
+        def check(i):
+            return i["major"] == 1 and i["minor"] == 8 and i["patch"] < 5
+
+        cmd = ["git", "--version"]
+        keys = ["major", "minor", "patch"]
+        vals = [int(i) for i in findall(r"\d+", run_cmd(cmd)[1])]
+        version = dict(zip(keys, vals))
+        return GitRunnerOld() if check(version) else GitRunnerNew()
+
+    def is_repo(self, path: Path) -> bool:
+        """ Checks if path is a git repository """
+        def check(p):
+            return p.exists() and p.is_dir()
+        return (check(Path("{}/.git".format(path))) or
+                len(self.rev_parse(path, ["--git-dir"]).split("\n")) > 0)
+
+    @abstractmethod
+    def fetch(self, path: Path) -> int:
+        """ Abstract fetch method """
+
+    @abstractmethod
+    def pull(self, path: Path) -> int:
+        """ Abstract pull method """
+
+    @abstractmethod
+    def rev_parse(self, path: Path, args: List[str]) -> str:
+        """ Abstract rev_parse method """
+
+
+class GitRunnerNew(Git):
+    """ Git class that uses a newer version of git """
+
+    def fetch(self, path: Path) -> int:
+        return call(["git", "-C", path, "fetch", "--quiet"])
+
+    def pull(self, path: Path) -> int:
+        return call(["git", "-C", path, "pull"])
+
+    def rev_parse(self, path: Path, args: List[str]) -> str:
+        return run_cmd(["git", "-C", str(path), "rev-parse"] + args)[1]
+
+
+class GitRunnerOld(Git):
+    """ Git class that uses an older version of git """
+
+    @staticmethod
+    def _execute_in_dir(path: Path, func: Callable, *args, **kwargs):
+        prev_cwd = Path.cwd()
+        try:
+            chdir(str(path))
+            return func(*args, **kwargs)
+        except NotADirectoryError:
+            pass
+        finally:
+            chdir(str(prev_cwd))
+
+    def fetch(self, path: Path) -> int:
+        cmd = ["git", "fetch", "--quiet"]
+        return GitRunnerOld._execute_in_dir(path, call, cmd)
+
+    def pull(self, path: Path) -> int:
+        cmd = ["git", "pull"]
+        return GitRunnerOld._execute_in_dir(path, call, cmd)
+
+    def rev_parse(self, path: Path, args: List[str]) -> str:
+        cmd = ["git", "rev-parse"] + args
+        ret = GitRunnerOld._execute_in_dir(path, run_cmd, cmd)
+        return ret[1] if ret else None
+
+
+def run_cmd(cmd: List[str]) -> Tuple[int, str]:
+    """ Executes a command """
+    with open(devnull, "w") as err:
+        out = PIPE
+        process = run(cmd, stdout=out, stderr=err,
+                      check=False)
+        return process.returncode, process.stdout.decode("utf-8").strip()
+
+
+def main():
+    """ Main function """
+    repos = dict()
+    git = Git.get_runner()
+
+    paths = argv[1:] if argv[1:] else ["."]
+
+    for i in paths:
+        for j in Path(i).glob("*"):
+            repo_path = git.rev_parse(j, ["--show-toplevel"])
+            if repo_path:
+                if repo_path in repos:
+                    break
+                if git.is_repo(j):
+                    repos[repo_path] = "1"
+
+    repos = sorted(repos.keys())
+
+    for i in repos:
+        cols, _ = get_terminal_size(fallback=(80, 0))
+
+        print("Updating {}... ".format(i), end="", flush=True)
+
+        git.fetch(i)
+        local_ref = git.rev_parse(i, ["HEAD"])
+        remote_ref = git.rev_parse(i, ["@{u}"])
+
+        if not remote_ref or local_ref == remote_ref:
+            print("Already up to date.")
+        else:
+            print("\n{}".format("=" * cols))
+            git.pull(i)
+            print("{}".format("=" * cols))
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,210 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC2030,SC2031
+
+: "${wal_path:=/usr/share/wal}"
+: "${all_monitors:=true}"
+: "${recursive:=true}"
+
+get_full_path()
+(
+    target="$1"
+
+    [[ -f "${target}" ]] && {
+        filename="${target##*/}"
+        [[ "${filename}" == "${target}" ]] && \
+            target="./${target}"
+        target="${target%/*}"
+    }
+
+    cd "${target}" || exit
+    full_path="${PWD}"
+
+    printf "%s" "${full_path%/}"
+)
+
+monitor_count()
+(
+    type -p xrandr > /dev/null && {
+        awk '/\yconnected\y/ {
+                sum += 1
+            }
+            END {
+                printf "%s", sum
+            }' <(xrandr --query)
+    }
+)
+
+list_monitors()
+(
+    type -p xrandr > /dev/null && {
+        awk 'BEGIN { count = 0 }
+        /\yconnected\y/ {
+            printf "%s%s%s %s\n", "Monitor", count, ":", $0
+            count++
+        }' <(xrandr --query)
+    }
+)
+
+check_img()
+(
+    ext="${1##*.}"
+    if [[ ! -d "$1" && "${ext,,}" =~ ^(jpg|png)$ ]]; then
+        return 0
+    else
+        return 1
+    fi
+)
+
+get_file_list()
+(
+    dir="$1"
+    if [[ -f "${dir}" ]] && check_img "${dir}"; then
+        printf "%s\\n" "${dir}"
+    elif [[ -d "${dir}" ]]; then
+        if [[ "${recursive}" == "true" ]]; then
+            shopt -s globstar
+            for i in "${dir}"/**/*; do
+                check_img "$i" && \
+                    list+=("$i")
+            done
+            shopt -u globstar
+        else
+            for i in "${dir}"/*/*; do
+                check_img "$i" && \
+                    list+=("$i")
+            done
+        fi
+
+        printf "%s\\n" "${list[@]}"
+    fi
+)
+
+rand()
+(
+    printf "%s" "$((RANDOM % $1))"
+)
+
+change_wal()
+(
+    img="$1"
+    monitor="${2:-0}"
+    property="/backdrop/screen0/monitor${monitor}/workspace0/last-image"
+    pid="$(pgrep -x xfce4-session)"
+
+    IFS="=" \
+    read -rd '' _ dbus_session \
+        < <(grep -z DBUS_SESSION_BUS_ADDRESS "/proc/${pid}/environ")
+    export DBUS_SESSION_BUS_ADDRESS="${dbus_session}"
+
+    printf "%s\\n" "Changing monitor${monitor} wallpaper to \"${img}\""
+    xfconf-query --channel xfce4-desktop \
+                 --property "${property}" \
+                 --set "${img}"
+)
+
+print_exit()
+{
+    printf "%s\\n" "XFCE is not running" >&2
+    exit 2
+}
+
+print_usage()
+(
+    printf "%s\\n" "
+Usage: ${0##*/} -o --option --option \"value\"
+
+    Options:
+
+    [-i|--image \"path\"]         Image or directory for wallpaper
+    [-m|--monitor \"num\"]        Index for the monitor to change
+    [-a|--all]                  Change the wallpaper on all monitors
+    [-s|--same-image]           Use the same image for all monitors
+    [-r|--recursive]            Search the image directory recursively
+    [-l|--list-monitors]        List all the monitors available
+    [-d|--dry]                  Run without changing wallpapers
+    [-h|--help]                 Show this message
+
+    Settings:
+
+    wal_path:       ${wal_path}
+    all_monitors:   ${all_monitors}
+    recursive:      ${recursive}
+
+    This bash script will set a wallpaper for the Xfce4 desktop
+    environment. Xrandr is required to detect the number of displays
+    connected. Settings are within the script. If no arguments are
+    are passed, then these settings will be used.
+"
+)
+
+get_args()
+{
+    while (($# > 0)); do
+        case "$1" in
+            "-i"|"--image")         wal_path="$(get_full_path "${2%/}")"; shift ;;
+            "-m"|"--monitor")       monitor="$2"; shift ;;
+            "-a"|"--all")           all_monitors="true" ;;
+            "-s"|"--same-image")    same="true" ;;
+            "-r"|"--recursive")     recursive="true" ;;
+            "-l"|"--list-monitors") list_monitors; exit ;;
+            "-d"|"--dry")           dry="true" ;;
+            "-h"|"--help")          print_usage; exit ;;
+        esac
+        shift
+    done
+}
+
+main()
+(
+    get_args "$@"
+
+    if [[ "${XDG_CURRENT_DESKTOP}" ]]; then
+        [[ "${XDG_CURRENT_DESKTOP}" != "XFCE" ]] && \
+            print_exit
+    elif type -p xprop > /dev/null 2>&1; then
+        [[ ! "$(xprop -root)" =~ XFCE|xfce ]] && \
+            print_exit
+    else
+        ! type -p xfconf-query > /dev/null 2>&1 && \
+            print_exit
+    fi
+
+    [[ ! -d "${HOME}/.last_wal" ]] && \
+        mkdir -p "${HOME}/.last_wal"
+
+    mapfile -t file_list < <(get_file_list "${wal_path}")
+
+    if [[ "${all_monitors}" == "true" ]]; then
+        num_monitors="$(monitor_count)"
+    else
+        num_monitors="$((monitor + 1))"
+    fi
+
+    _change_wal()
+    (
+        [[ -f "${HOME}/.last_wal/monitor${i}" ]] && \
+            last_wal="$(< "${HOME}/.last_wal/monitor${i}")"
+
+        [[ "${same}" != "true" ]] && \
+            unset img
+
+        until [[ "${img}" && "${img}" != "${last_wal}" ]]; do
+            index="$(rand "${#file_list[@]}")"
+            img="${file_list[${index}]}"
+        done
+
+        if [[ "${dry}" != "dry" ]]; then
+            printf "%s" "${img}" > "${HOME}/.last_wal/monitor${i}"
+            change_wal "${img}" "$i"
+        else
+            printf "Changing monitor%s to %s\\n" "$i" "${img}" >&2
+        fi
+    )
+
+    [[ "${file_list[*]}" ]] && \
+        for ((i = ${monitor:-0}; i < ${num_monitors:-1}; i++)); do
+            _change_wal &
+        done
+)
+
+main "$@"

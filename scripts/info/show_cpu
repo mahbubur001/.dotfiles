@@ -1,0 +1,566 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC2048,SC2086
+
+has()
+{
+    # Check if system has a program installed
+    if type -p "$1" > /dev/null 2>&1; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+print_stdout()
+{
+    # Print to stdout
+    [[ "${title}" ]] && printf "%s\\n" "${title}"
+    [[ "${subtitle}" ]] && printf "%s\\n" "${subtitle}"
+    [[ "${message}" ]] && printf "%s\\n" "${message}"
+}
+
+notify()
+{
+    [[ "${title}" =~ (^( \| ))|(( \| )$) ]] && {
+        title="${title##' | '}"
+        title="${title%%' | '}"
+    }
+
+    [[ "${subtitle}" =~ (^( \| ))|(( \| )$) ]] && {
+        subtitle="${subtitle##' | '}"
+        subtitle="${subtitle%%' | '}"
+    }
+
+    [[ "${message}" =~ (^( \| ))|(( \| )$) ]] && {
+        message="${message##' | '}"
+        message="${message%%' | '}"
+    }
+
+    # Check if we're printing to stdout or a notification program
+    if [[ "${out}" == "stdout" ]]; then
+        print_stdout
+    else
+        # If no notification program is found, print to stdout
+        if has "notify-send" || has "osascript"; then
+            if [[ "${subtitle}" && "${message}" ]]; then
+                body="${subtitle}\\n${message}"
+            elif [[ ! "${subtitle}" || ! "${message}" ]]; then
+                body+="${subtitle}"
+                body+="${message}"
+            else
+                body=""
+            fi
+
+            # Call notification program
+            case "${os}" in
+                "MacOS")
+                    script="display notification \"${message}\" \
+                            with title \"${title}\" \
+                            subtitle \"${subtitle}\""
+                    /usr/bin/env osascript <<< "${script}"
+                ;;
+
+                "Linux")
+                    notify-send --icon=dialog-information "${title}" "${body}"
+                ;;
+            esac
+        else
+            print_stdout
+        fi
+    fi
+}
+
+trim()
+{
+    # Trims a string
+    [[ "$*" ]] && {
+        set -f
+        set -- $*
+        printf "%s" "${*//\"}"
+        set +f
+    }
+}
+
+read_file()
+{
+    # Check if file exist and reads it
+    local file="$1"
+    [[ -f "${file}" ]] && \
+        printf "%s" "$(< "${file}")"
+}
+
+percent()
+{
+    # Calculates percentage
+    [[ "$1" && "$2" ]] && (($(awk -v a="$2" 'BEGIN { printf "%d", (a > 0) }'))) && \
+        awk -v a="$1" -v b="$2" 'BEGIN { printf "%f", (a / b) * 100 }'
+}
+
+div()
+{
+    # Calculates division as a float
+    [[ "$1" && "$2" ]] && (($(awk -v a="$2" 'BEGIN { printf "%d", (a != 0) }'))) && \
+        awk -v a="$1" -v b="$2" 'BEGIN { printf "%f", a / b }'
+}
+
+round()
+{
+    # Rounds number to certain places
+    [[ "$1" && "$2" ]] && \
+        printf "%.*f" "$1" "$2"
+}
+
+_get_function_from_string()
+{
+    declare -A uniq
+    local regex='(\{)([a-zA-Z_]+)'
+    local str="$1"
+    local -a func
+
+    while [[ "${str}" =~ ${regex} ]]; do
+        [[ ! "${uniq[${BASH_REMATCH[2]}]}" ]] && {
+            uniq[${BASH_REMATCH[2]}]="1"
+            func+=("${BASH_REMATCH[2]}")
+        }
+        str="${str/${BASH_REMATCH[2]}}"
+    done
+
+    printf "%s\\n" "${func[@]}"
+}
+
+make_string()
+{
+    local str="$1"
+    local out="${str}"
+    local -a func
+
+    mapfile -t func < <(_get_function_from_string "${str}")
+
+    for function in "${func[@]}"; do
+        token_match="\\{(${function})((\\?)([^\\{]*(\\{(${function})?\\})[^\\}]*))?\\}"
+
+        if [[ "${cpu_info[${function}]}" ]]; then
+            [[ "${out}" =~ ${token_match} ]]
+            if [[ "${BASH_REMATCH[2]}" ]]; then
+                token="${BASH_REMATCH[0]}"
+                token="${token/${BASH_REMATCH[5]}/${cpu_info[${function}]}}"
+                token="${token/\{${BASH_REMATCH[1]}\?}"
+                token="${token%\}}"
+                out="${out/${BASH_REMATCH[0]}/${token}}"
+            else
+                out="${out/${BASH_REMATCH[0]}/${cpu_info[${function}]}}"
+            fi
+        else
+            [[ "${out}" =~ ${token_match} ]]
+            out="${out/${BASH_REMATCH[0]}}"
+        fi
+    done
+
+    printf "%s" "${out}"
+}
+
+get_os()
+{
+    # Determine os on machine
+    case "${OSTYPE:-$(uname -s)}" in
+        "Darwin"|"darwin"*) os="MacOS" ;;
+        "Linux"|"linux"*) os="Linux" ;;
+        "FreeBSD"|"freebsd"*) os="FreeBSD" ;;
+    esac
+}
+
+get_cores()
+{
+    # Get number of cores on the cpu
+    cores="0"
+    case "${os}" in
+        "MacOS")
+            cores="$(sysctl -n hw.logicalcpu_max)"
+        ;;
+
+        "Linux")
+            while read -r line; do
+                [[ "${line}" =~ ^processor ]] && \
+                    ((cores++))
+            done < /proc/cpuinfo
+        ;;
+
+        "FreeBSD")
+            cores="$(sysctl -n hw.ncpu)"
+        ;;
+    esac
+    cpu_info[cores]="${cores}"
+}
+
+get_cpu()
+{
+    # Get the cpu model and speed
+    case "${os}" in
+        "MacOS")
+            cpu="$(sysctl -n machdep.cpu.brand_string)"
+        ;;
+
+        "Linux")
+            while [[ ! "${cpu}" ]] && IFS=":" read -r a b; do
+                [[ "$a" =~ 'model name' ]] && \
+                    cpu="$b"
+            done < /proc/cpuinfo
+
+            shopt -s globstar
+            shopt -s extglob
+
+            dir="/sys/devices/system/cpu"
+            while [[ ! "${speed_file}" ]] && read -r file; do
+                speed_file="${file}"
+            done < <(printf "%s\\n" "${dir}/"**/?(bios_limit|?(scaling|cpuinfo)_max_freq))
+            unset file
+
+            shopt -u globstar
+            shopt -u extglob
+
+            [[ "${speed_file}" ]] && {
+                speed="$(read_file "${speed_file}")"
+                speed="$(div "${speed}" "1000000")"
+                speed="$(round "2" "${speed}")"
+            }
+        ;;
+
+        "FreeBSD")
+            cpu="$(sysctl -n hw.model)"
+
+            speed="$(sysctl -n hw.cpuspeed 2> /dev/null)"
+            speed="${speed:-$(sysctl -n hw.clockrate)}"
+            speed="$(div "${speed}" 1000)"
+            speed="$(round "2" "${speed}")"
+        ;;
+    esac
+
+    [[ ! "${cores}" ]] && get_cores
+
+    # Format string
+    cpu="${cpu//CPU}"
+    cpu="${cpu//(R)}"
+    cpu="${cpu//(TM)}"
+
+    if [[ "${speed}" ]]; then
+        cpu="${cpu//@*}"
+        cpu="${cpu} (${cores}) @ ${speed}GHz"
+    else
+        cpu="${cpu//@/(${cores}) @}"
+    fi
+
+    cpu="$(trim "${cpu}")"
+    cpu_info[cpu]="${cpu}"
+}
+
+get_load()
+{
+    # Get load avgerages
+    case "${os}" in
+        "MacOS"|"FreeBSD")
+            read -r _ a b c _ < <(sysctl -n vm.loadavg)
+        ;;
+
+        "Linux")
+            read -r a b c _ < /proc/loadavg
+        ;;
+    esac
+
+    load_avg="$a $b $c"
+    cpu_info[load]="${load_avg}"
+}
+
+get_cpu_usage()
+{
+    # Calculate the cpu usage using ps
+    read -rd '' awk_script <<'EOF'
+        # Under FreeBSD, the idle process is listed as using 100% usage
+        /! idle/ { sum += $3 }
+        END {
+            printf "%f", sum / cores
+        }
+EOF
+
+    cpu_usage="$(awk -v cores="${cores:-1}" \
+                     -v sum="0" "${awk_script}" <(ps aux))"
+    cpu_usage="$(round "1" "${cpu_usage}")"
+    cpu_info[cpu_usage]="${cpu_usage}%"
+}
+
+get_temp()
+{
+    # Get cpu temperature
+    case "${os}" in
+        "MacOS")
+            # Workaround for ubersicht which requires the full path
+            # of the executable
+            exe="/usr/local/bin/osx-cpu-temp"
+            has "${exe}" && {
+                regex='CPU: (([0-9]+\.)?[0-9]+)'
+                [[ "$("${exe}" -f -c)" =~ ${regex} ]]
+                temp="$(round "1" "${BASH_REMATCH[1]/' °C'}")"
+            }
+        ;;
+
+        "Linux")
+            while [[ ! "${temp_file}" ]] && read -r dir; do
+                [[ -e "${dir}/name" && "$(< "${dir}/name")" =~ 'temp' ]] && \
+                    while [[ ! "${temp_file}" ]] && read -r file; do
+                        temp_file="${file}"
+                    done < <(printf "%s\\n" "${dir}/temp"*"_input")
+            done < <(printf "%s\\n" "/sys/class/hwmon/"*)
+            unset file
+
+            [[ "${temp_file}" ]] && \
+                temp="$(($(read_file "${temp_file}") / 1000))"
+        ;;
+
+        "FreeBSD")
+            temp="$(sysctl -n dev.cpu.0.temperature 2> /dev/null)"
+            temp="${temp/'C'}"
+        ;;
+    esac
+    [[ "${temp}" ]] && cpu_info[temp]="${temp}°C"
+}
+
+get_fan()
+{
+    case "${os}" in
+        "MacOS")
+            # Workaround for ubersicht which requires the full path
+            # of the executable
+            exe="/usr/local/bin/osx-cpu-temp"
+            has "${exe}" && {
+                regex='([0-9]+) RPM'
+                [[ "$("${exe}" -f -c)" =~ ${regex} ]]
+                fan="${BASH_REMATCH[1]}"
+            }
+        ;;
+
+        "Linux")
+            shopt -s globstar
+            shopt -s nullglob
+
+            while [[ ! "${fan}" ]] && read -r file; do
+                [[ -e "${file}" ]] &&  (($(< "${file}") != 0)) && \
+                    fan="$(< "${file}")"
+            done < <(printf "%s\\n" "/sys/devices/platform/"**"/fan1_input")
+            unset file
+
+            shopt -u globstar
+            shopt -u nullglob
+        ;;
+
+        "FreeBSD")
+            # Stub
+            fan="0"
+        ;;
+    esac
+    [[ "${fan}" ]] && cpu_info[fan]="${fan} RPM"
+}
+
+get_uptime()
+{
+    # Get system uptime
+    case "${os}" in
+        "MacOS"|"FreeBSD")
+            boot="$(sysctl -n kern.boottime)"
+            boot="${boot/'{ sec = '}"
+            boot="${boot/,*}"
+            secs="$((${EPOCHSECONDS:-$(printf "%(%s)T" "-1")} - boot))"
+        ;;
+
+        "Linux")
+            IFS="." read -r secs _ < "/proc/uptime"
+        ;;
+    esac
+
+    days="$((secs / 60 / 60 / 24))"
+    hours="$((secs / 60 / 60 % 24))"
+    mins="$((secs / 60 % 60))"
+    secs="$(((secs % 60) % 60))"
+
+    ((days == 0)) && unset days
+    ((hours == 0)) && unset hours
+    ((mins == 0)) && unset mins
+
+    uptime="${days:+${days}d }${hours:+${hours}h }${mins:+${mins}m }${secs}s"
+    cpu_info[uptime]="${uptime}"
+}
+
+print_usage()
+{
+    # Print usage message
+    printf "%s\\n" "
+Usage: ${0##*/} info_name --option --option [value] ...
+
+Options:
+    --stdout            Print to stdout
+    --json              Print in json format
+    -r, --raw           Print in csv format
+    -h, --help          Show this message
+
+Info:
+    info_name           Print the output of func_name
+
+Valid Names:
+    cores
+    cpu
+    load
+    cpu_usage
+    fan
+    temp
+    uptime
+
+Output:
+    -f, --format \"str\"    Print info_name in a formatted string
+                          Used in conjuction with info_name
+
+Syntax:
+    {}  Output of info_name
+
+Examples:
+    Print all information as a notification:
+    \$ ${0##*/}
+
+    Print to standard out:
+    \$ ${0##*/} --stdout
+
+    Print CPU name and CPU Usage:
+    \$ ${0##*/} cpu cpu_usage
+
+    Print CPU temperature and fan speed with a format string:
+    \$ ${0##*/} --format '{temp?{} | }{fan}'
+
+Misc:
+    If notify-send is not installed, then the script will
+    print to standard output.
+"
+}
+
+get_args()
+{
+    # Parse arguments
+    while (($# > 0)); do
+        case "$1" in
+            "--stdout") : "${out:=stdout}" ;;
+            "--json") : "${out:=json}" ;;
+            "-r"|"--raw") : "${out:=raw}" ;;
+            "-f"|"--format")
+                [[ "$2" ]] && {
+                    : "${out:=string}"
+                    str_format="$2"
+
+                    tmp="${str_format}"
+                    regex='\{([a-zA-Z_]+)\?[^\{]*\{([a-zA-Z_]+)}'
+
+                    # String validation
+                    while [[ "${tmp}" =~ ${regex} ]]; do
+                        tmp="${tmp/${BASH_REMATCH[0]}}"
+                        [[ "${BASH_REMATCH[1]}" != "${BASH_REMATCH[2]}" ]] && {
+                            printf "Invalid format: %s != %s\\n" \
+                                   "${BASH_REMATCH[1]}" \
+                                   "${BASH_REMATCH[2]}" >&2
+                            exit 1
+                        }
+                    done
+
+                    mapfile -t func < <(_get_function_from_string "${str_format}")
+                    shift
+                }
+            ;;
+
+            "-h"|"--help") print_usage; exit ;;
+            *)
+                : "${out:=string}"
+                func+=("$1")
+            ;;
+        esac
+        shift
+    done
+}
+
+main()
+{
+    # Declare an associative table for storing info
+    declare -A cpu_info
+
+    # Parse arguments and detect os
+    get_args "$@"
+    get_os
+
+    # If no specific function is selected, then run all functions
+    [[ ! "${func[*]}" ]] && \
+        func=(
+            "cores" "cpu" "load"
+            "cpu_usage" "fan" "temp"
+            "uptime"
+        )
+
+    # For every entry in func, check if it exists and execute it
+    for function in "${func[@]}"; do
+        [[ "$(type -t "get_${function}")" == "function" ]] && \
+            "get_${function}"
+    done
+
+    # For every entry in func, check if the information returns an empty string
+    # and remove it. Skip if using the '--format' option because we want to
+    # manually detect if there is an empty entry
+    [[ ! "${str_format}" ]] && \
+        for i in "${!func[@]}"; do
+            [[ ! "${cpu_info[${func[$i]}]}" ]] && \
+                unset 'func[$i]'
+        done
+
+    # If there are no entries in func, then exit script
+    [[ ! "${func[*]}" ]] && \
+        exit 1
+
+    case "${out}" in
+        "raw")
+            # Print in csv/colon delimited form
+            raw="${func[0]}:${cpu_info[${func[0]}]}"
+            for function in "${func[@]:1}"; do
+                raw="${raw},${function}:${cpu_info[${function}]}"
+            done
+            printf "%s\\n" "${raw}"
+        ;;
+
+        "json")
+            # Print in JSON form
+            printf "{\\n"
+            for function in "${func[@]::${#func[@]} - 1}"; do
+                printf "    \"%s\": \"%s\",\\n" "${function}" "${cpu_info[${function}]}"
+            done
+
+            last="${func[*]:(-1):1}"
+            printf "    \"%s\": \"%s\"\\n" "${last}" "${cpu_info[${last}]}"
+            printf "}\\n"
+        ;;
+
+        "string")
+            # Print in a formated string form
+            if [[ "${str_format}" ]]; then
+                printf "%s" "$(make_string "${str_format}")"
+            else
+                for function in "${func[@]}"; do
+                    printf "%s\\n" "${cpu_info[${function}]}"
+                done
+            fi
+        ;;
+
+        *)
+            title_fmt="{cpu}"
+            subtitle_fmt="{load?{} | }{cpu_usage?{} | }{temp?{} | }{fan}"
+            message_fmt="Uptime: {uptime}"
+
+            title="$(make_string "${title_fmt}")"
+            subtitle="$(make_string "${subtitle_fmt}")"
+            message="$(make_string "${message_fmt}")"
+
+            notify
+        ;;
+    esac
+}
+
+main "$@"
