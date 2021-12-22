@@ -1,8 +1,10 @@
 local ts_configs = require("nvim-treesitter.configs")
+-- vim.opt.foldmethod = "expr"
+-- vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 ts_configs.setup({
     ensure_installed = {"bash", "c", "cmake", "comment", "cpp", "css", "fish", "go", "graphql", "html", "javascript",
                         "jsonc", "latex", "lua", "python", "regex", "rust", "svelte", "toml", "tsx", "typescript",
-                        "vue", "yaml", "php" -- "markdown",
+                        "vue", "yaml", "php", --"markdown",
     },
     highlight = {
         enable = true,

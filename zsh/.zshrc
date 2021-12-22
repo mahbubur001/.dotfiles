@@ -156,3 +156,4 @@ export PATH="/usr/local/opt/php@7.4/bin:$PATH"
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
+export PATH="/usr/local/sbin:$PATH"

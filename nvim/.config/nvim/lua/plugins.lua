@@ -22,7 +22,6 @@ local config = {
 }
 
 local function plugins(use)
-    -- Packer can manage itself as an optional plugin
     use {
         "wbthomason/packer.nvim",
         opt = true
@@ -92,19 +91,13 @@ local function plugins(use)
         config = [[require('config.treesitter')]]
     })
 
-    -- Theme: color schemes
-    --    use {
-    --        "folke/tokyonight.nvim",
-    --        config = function()
-    --            require("config.theme")
-    --        end
-    --    }
     use {
         "eddyekofo94/gruvbox-flat.nvim",
         config = function()
             require("config.gruvbox")
         end
     }
+
     -- Theme: icons
     use {
         "kyazdani42/nvim-web-devicons",
@@ -388,6 +381,13 @@ local function plugins(use)
         module = "snap"
     })
     use("kmonad/kmonad-vim")
+
+    use({
+      "rcarriga/nvim-notify",
+      config = function()
+          vim.notify = require("notify")
+      end
+    })
 
 end
 

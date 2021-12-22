@@ -17,28 +17,31 @@ wk.setup({
 })
 
 -- Move to window using the <ctrl> movement keys
--- util.nmap("<M-left>", "<C-w>h")
--- util.nmap("<A-down>", "<C-w>j")
--- util.nmap("<A-up>", "<C-w>k")
--- util.nmap("<M-right>", "<C-w>l")
+util.nmap("<C-h>", "<C-w>h")
+util.nmap("<C-j>", "<C-w>j")
+util.nmap("<C-k>", "<C-w>k")
+util.nmap("<C-l>", "<C-w>l")
 
 -- Resize window using <ctrl> arrow keys
-util.nnoremap("<S-Up>", ":resize +2<CR>")
-util.nnoremap("<S-Down>", ":resize -2<CR>")
-util.nnoremap("<S-Left>", ":vertical resize -2<CR>")
-util.nnoremap("<S-Right>", ":vertical resize +2<CR>")
+util.nnoremap("<C-S-Up>", ":resize +2<CR>")
+util.nnoremap("<C-S-Down>", ":resize -2<CR>")
+util.nnoremap("<C-S-Left>", ":vertical resize -2<CR>")
+util.nnoremap("<C-S-Right>", ":vertical resize +2<CR>")
 
 -- Move Lines
-util.nnoremap("<Alt-Down>", ":m .+1<CR>==")
-util.vnoremap("<Alt-Down>", ":m '>+1<CR>gv=gv")
-util.inoremap("<Alt-Down>", "<Esc>:m .+1<CR>==gi")
-util.nnoremap("<Alt-Up>", ":m .-2<CR>==")
-util.vnoremap("<Alt-Up>", ":m '<-2<CR>gv=gv")
-util.inoremap("<Alt-Up>", "<Esc>:m .-2<CR>==gi")
+util.nnoremap("<^[[1;3A>", ":m .+1<CR>==")
+util.vnoremap("M-Down>", ":m '>+1<CR>gv=gv")
+util.inoremap("<M-Down>", "<Esc>:m .+1<CR>==gi")
+util.nnoremap("<M-Up>", ":m .-2<CR>==")
+util.vnoremap("<M-Up>", ":m '<-2<CR>gv=gv")
+util.inoremap("<M-Up>", "<Esc>:m .-2<CR>==gi")
 
 -- Switch buffers with tab
-util.nnoremap("<C-S-Tab>", ":bprevious<cr>")
+util.nnoremap("<C-S-Tab>", ":bprevious <cr>")
 util.nnoremap("<C-Tab>", ":bnext<cr>")
+
+-- Insert
+util.inoremap("jk", "<ESC>");
 
 -- Easier pasting
 util.nnoremap("[p", ":pu!<cr>")
@@ -48,6 +51,17 @@ util.nnoremap("]p", ":pu<cr>")
 util.map("", "<esc>", ":noh<cr>")
 util.nnoremap("gw", "*N")
 util.xnoremap("gw", "*N")
+
+--Saves
+util.nnoremap("<C-s>", ":w <CR>");
+util.vnoremap("<C-s>", ":w <CR>")
+util.inoremap("<C-s>", "<ESC>:w <CR>")
+
+-- File open
+util.nnoremap("<C-p>", ":Telescope find_files<cr>");
+util.vnoremap("<C-p>", ":Telescope find_files<cr>")
+util.inoremap("<C-p>", "<ESC>:Telescope find_files<cr>")
+
 
 -- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
 util.nnoremap("n", "'Nn'[v:searchforward]", {
@@ -240,9 +254,6 @@ local leader = {
         l = {"<cmd>lopen<cr>", "Open Location List"},
         q = {"<cmd>copen<cr>", "Open Quickfix List"}
     },
-    Z = {[[<cmd>lua require("zen-mode").reset()<cr>]], "Zen Mode"},
-    z = {[[<cmd>ZenMode<cr>]], "Zen Mode"},
-    T = {[[<Plug>PlenaryTestFile]], "Plenary Test"},
     D = {function()
         util.docs()
     end, "Create Docs from README.md"}

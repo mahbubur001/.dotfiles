@@ -33,7 +33,7 @@ function M.setup(client, bufnr)
   if client.name == "typescript" then
     keymap.c.o = { "<cmd>:TSLspOrganize<CR>", "Organize Imports" }
     keymap.c.R = { "<cmd>:TSLspRenameFile<CR>", "Rename File" }
-  end
+ end
 
   local keymap_visual = {
     c = {

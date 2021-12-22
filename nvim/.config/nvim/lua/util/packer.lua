@@ -12,7 +12,7 @@ function M.bootstrap()
         vim.cmd("packadd packer.nvim")
     end
     vim.cmd([[packadd packer.nvim]])
-    -- vim.cmd("autocmd BufWritePost plugins.lua PackerCompile") -- Auto compile when there are changes in plugins.lua
+    vim.cmd("autocmd BufWritePost plugins.lua PackerCompile") -- Auto compile when there are changes in plugins.lua
 end
 
 function M.get_name(pkg)
