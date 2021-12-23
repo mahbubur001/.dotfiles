@@ -2,7 +2,7 @@ require("bufferline").setup({
     options = {
         show_close_icon = true,
         diagnostics = "nvim_lsp",
-        always_show_bufferline = false,
+        always_show_bufferline = true,
         separator_style = "slant",
         diagnostics_indicator = function(_, _, diagnostics_dict)
             local s = " "

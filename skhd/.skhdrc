@@ -1,8 +1,9 @@
 #! /usr/bin/bash
 
 # opens iTerm2
-alt - return : "${HOME}"/.dotfiles/scripts/utils/open_iterm2
-alt - 1 : "${HOME}"/.dotfiles/scripts/utils/open_phpstorm
+alt - a : open /Applications/iTerm.app
+alt - p : open /Applications/PhpStorm.app
+alt - c : open /Applications/Google Chrome.app
 
 # Navigation
 alt - h : yabai -m window --focus west
