@@ -37,8 +37,8 @@ util.vnoremap("<M-Up>", ":m '<-2<CR>gv=gv")
 util.inoremap("<M-Up>", "<Esc>:m .-2<CR>==gi")
 
 -- Switch buffers with tab
-util.nnoremap("<C-S-Tab>", ":bprevious <cr>")
-util.nnoremap("<C-Tab>", ":bnext<cr>")
+util.nnoremap("<S-Tab>", ":bprevious <cr>")
+util.nnoremap("<Tab>", ":bnext<cr>")
 
 -- Insert
 util.inoremap("jk", "<ESC>");
@@ -146,20 +146,9 @@ local leader = {
         ["v"] = {"<C-W>v", "split-window-right"}
     },
     c = {
-        v = {"<cmd>Vista!!<CR>", "Vista"},
         o = {"<cmd>SymbolsOutline<cr>", "Symbols Outline"}
     },
     ["e"] = {"<cmd>::NvimTreeToggle<CR>", "Toggle file tree"},
-    b = {
-        name = "+buffer",
-        ["b"] = {"<cmd>:e #<cr>", "Switch to Other Buffer"},
-        ["p"] = {"<cmd>:BufferLineCyclePrev<CR>", "Previous Buffer"},
-        ["["] = {"<cmd>:BufferLineCyclePrev<CR>", "Previous Buffer"},
-        ["n"] = {"<cmd>:BufferLineCycleNext<CR>", "Next Buffer"},
-        ["]"] = {"<cmd>:BufferLineCycleNext<CR>", "Next Buffer"},
-        ["d"] = {"<cmd>:bd<CR>", "Delete Buffer"},
-        ["g"] = {"<cmd>:BufferLinePick<CR>", "Goto Buffer"}
-    },
     g = {
         name = "+git",
         g = {"<cmd>Neogit<CR>", "NeoGit"},
