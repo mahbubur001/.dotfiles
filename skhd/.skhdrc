@@ -1,6 +1,6 @@
 #! /usr/bin/bash
 
-# opens iTerm2
+# opens Applecation
 alt - a : open /Applications/iTerm.app
 alt - p : open /Applications/PhpStorm.app
 alt - c : open /Applications/Google Chrome.app
