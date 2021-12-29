@@ -64,6 +64,17 @@ local function plugins(use)
     })
 
     use({
+        'ray-x/navigator.lua',
+        requires = {
+            'ray-x/guihua.lua',
+            run = 'cd lua/fzy && make'
+        },
+        config = function()
+            require("config.navigator")
+        end
+    })
+
+    use({
         "simrat39/symbols-outline.nvim",
         cmd = {"SymbolsOutline"}
     })
@@ -346,14 +357,6 @@ local function plugins(use)
     })
 
     use({
-        "folke/which-key.nvim",
-        event = "VimEnter",
-        config = function()
-            require("config.keys")
-        end
-    })
-
-    use({
         "sindrets/diffview.nvim",
         cmd = {"DiffviewOpen", "DiffviewClose", "DiffviewToggleFiles", "DiffviewFocusFiles"},
         config = function()
@@ -383,10 +386,10 @@ local function plugins(use)
     use("kmonad/kmonad-vim")
 
     use({
-      "rcarriga/nvim-notify",
-      config = function()
-          vim.notify = require("notify")
-      end
+        "rcarriga/nvim-notify",
+        config = function()
+            vim.notify = require("notify")
+        end
     })
 
 end

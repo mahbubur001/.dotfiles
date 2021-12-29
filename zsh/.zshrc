@@ -131,7 +131,6 @@ alias o="open ." # Open the current directory in Finder
 
 
 alias v="nvim"
-
 # # ----------------------
 # # Git Aliases
 # # ----------------------
