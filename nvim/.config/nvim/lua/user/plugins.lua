@@ -11,23 +11,28 @@ local config = {
             })
         end
     }
-    -- list of plugins that should be taken from ~/projects
-    -- this is NOT packer functionality!
-    -- local_plugins = {
-    --     -- folke = true,
-    --     ["null-ls.nvim"] = false,
-    --     ["nvim-lspconfig"] = false
-    --     -- ["nvim-treesitter"] = true,
-    -- }
-}
+   }
 
 local function plugins(use)
     use {
         "wbthomason/packer.nvim",
         opt = true
     }
-    use "nathom/filetype.nvim"
-    use "folke/lua-dev.nvim"
+    use({
+        "nathom/filetype.nvim",
+        config = function()
+          require("config.filetype")
+        end,
+    })
+
+    use({ "stevearc/dressing.nvim", event = "BufReadPre" })
+    use({
+        "rcarriga/nvim-notify",
+        event = "VimEnter",
+        config = function()
+          vim.notify = require("notify")
+        end,
+      })
 
     -- LSP
     use {
@@ -41,6 +46,10 @@ local function plugins(use)
         requires = {"jose-elias-alvarez/nvim-lsp-ts-utils", "jose-elias-alvarez/null-ls.nvim", "folke/lua-dev.nvim",
                     "williamboman/nvim-lsp-installer"}
     }
+
+
+    use({ "kazhala/close-buffers.nvim", cmd = "BDelete" })
+
     use({
         "hrsh7th/nvim-cmp",
         event = "InsertEnter",
@@ -384,14 +393,6 @@ local function plugins(use)
         module = "snap"
     })
     use("kmonad/kmonad-vim")
-
-    use({
-        "rcarriga/nvim-notify",
-        config = function()
-            vim.notify = require("notify")
-        end
-    })
-
 end
 
 return packer.setup(config, plugins)

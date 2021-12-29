@@ -1,22 +1,4 @@
 vim.g.mapleader = ' '
-vim.api.nvim_set_keymap('n', '<Space>', '<NOP>', {
-    noremap = true,
-    silent = true
-})
-
-
-vim.api.nvim_set_keymap('x', 'K', ':move \'<-2<CR>gv-gv', {
-    noremap = true,
-    silent = true
-})
-vim.api.nvim_set_keymap('x', 'J', ':move \'>+1<CR>gv-gv', {
-    noremap = true,
-    silent = true
-})
-
-vim.cmd('inoremap <expr> <c-j> (\"\\<C-n>\")')
-vim.cmd('inoremap <expr> <c-k> (\"\\<C-p>\")')
-vim.cmd("vnoremap // y/\\V<C-R>=escape(@\",'/\')<CR><CR>")
 
 local util = require("util")
 
@@ -56,6 +38,7 @@ util.xnoremap("gw", "*N")
 util.nnoremap("<C-s>", ":w <CR>");
 util.vnoremap("<C-s>", ":w <CR>")
 util.inoremap("<C-s>", "<ESC>:w <CR>")
+util.nnoremap("<C-c>", "<ESC> <CR>")
 
 util.nnoremap("<C-Q>", ":x <CR>");
 util.vnoremap("<C-Q>", ":x <CR>")
@@ -66,25 +49,12 @@ util.vnoremap("<C-p>", ":Telescope find_files<cr>")
 util.inoremap("<C-p>", "<ESC>:Telescope find_files<cr>")
 
 -- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
-util.nnoremap("n", "'Nn'[v:searchforward]", {
-    expr = true
-})
-util.xnoremap("n", "'Nn'[v:searchforward]", {
-    expr = true
-})
-util.onoremap("n", "'Nn'[v:searchforward]", {
-    expr = true
-})
-util.nnoremap("N", "'nN'[v:searchforward]", {
-    expr = true
-})
-util.xnoremap("N", "'nN'[v:searchforward]", {
-    expr = true
-})
-util.onoremap("N", "'nN'[v:searchforward]", {
-    expr = true
-})
-
+util.nnoremap("n", "'Nn'[v:searchforward]", { expr = true })
+util.xnoremap("n", "'Nn'[v:searchforward]", { expr = true })
+util.onoremap("n", "'Nn'[v:searchforward]", { expr = true })
+util.nnoremap("N", "'nN'[v:searchforward]", { expr = true })
+util.xnoremap("N", "'nN'[v:searchforward]", { expr = true })
+util.onoremap("N", "'nN'[v:searchforward]", { expr = true })
 -- better indenting
 util.vnoremap("<", "<gv")
 util.vnoremap(">", ">gv")
@@ -107,4 +77,6 @@ vim.api.nvim_exec([[
   xnoremap * :<C-u>call g:VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
   xnoremap # :<C-u>call g:VSetSearch('?')<CR>?<C-R>=@/<CR><CR>
 ]], false)
+
+require('user.lspkeymaps')
 

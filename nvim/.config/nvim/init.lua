@@ -1,9 +1,9 @@
 -- Plugins
 require("util")
-require("options")
+require("user.options")
 
 -- no need to load this immediately, since we have packer_compiled
 vim.defer_fn(function()
-    require("plugins")
-    require("mappings")
+    require("user.plugins")
+    require("user.keymaps")
 end, 0)
