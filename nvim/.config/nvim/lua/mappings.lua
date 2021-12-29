@@ -52,11 +52,14 @@ util.map("", "<esc>", ":noh<cr>")
 util.nnoremap("gw", "*N")
 util.xnoremap("gw", "*N")
 
--- Saves
+-- Saves & Quite
 util.nnoremap("<C-s>", ":w <CR>");
 util.vnoremap("<C-s>", ":w <CR>")
 util.inoremap("<C-s>", "<ESC>:w <CR>")
 
+util.nnoremap("<C-Q>", ":x <CR>");
+util.vnoremap("<C-Q>", ":x <CR>")
+util.inoremap("<C-Q>", "<ESC>:x <CR>")
 -- File open
 util.nnoremap("<C-p>", ":Telescope find_files<cr>");
 util.vnoremap("<C-p>", ":Telescope find_files<cr>")
@@ -89,8 +92,8 @@ util.vnoremap(">", ">gv")
 -- NvimTree
 util.nnoremap("<C-e>", ":NvimTreeToggle<CR>")
 util.inoremap("<C-e>", "<esc>:NvimTreeToggle<CR>")
-util.nnoremap("<leader>r", ":NvimTreeRefresh<CR>")
-util.nnoremap("<leader>n", ":NvimTreeFindFile<CR>")
+util.nnoremap("<leader>er", ":NvimTreeRefresh<CR>")
+util.nnoremap("<leader>en", ":NvimTreeFindFile<CR>")
 
 -- makes * and # work on visual mode too.
 vim.api.nvim_exec([[
