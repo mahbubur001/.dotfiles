@@ -2,7 +2,7 @@ vim.g.mapleader = ' '
 
 local util = require("util")
 
-vim.o.timeoutlen = 300
+vim.o.timeoutlen = 400
 
 -- Move to window using the <ctrl> movement keys
 util.nmap("<C-h>", "<C-w>h")
@@ -78,8 +78,6 @@ vim.api.nvim_exec([[
   xnoremap * :<C-u>call g:VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
   xnoremap # :<C-u>call g:VSetSearch('?')<CR>?<C-R>=@/<CR><CR>
 ]], false)
-
-require('user.lspkeymaps')
 
 -- Terminal
 local Terminal  = require('toggleterm.terminal').Terminal

@@ -116,7 +116,6 @@ source $ZSH/oh-my-zsh.sh
 # Aliases
 # -------
 alias ls="exa -a --long --icons"
-alias 🍺="git checkout -b drunk"
 alias a='code .'
 alias c='code .'
 alias reveal-md="reveal-md --theme night --highlight-theme hybrid --port 1337"
@@ -132,6 +131,7 @@ alias o="open ." # Open the current directory in Finder
 
 alias v="nvim"
 alias lg="lazygit"
+alias lzd='lazydocker'
 # # ----------------------
 # # Git Aliases
 # # ----------------------
@@ -153,7 +153,5 @@ alias cds='find . -name '.DS_Store' -type f -delete'
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export PATH="/usr/local/opt/php@7.4/bin:$PATH"
-
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 export PATH="/usr/local/sbin:$PATH"
