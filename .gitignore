@@ -1,3 +1,4 @@
 nvim/.config/nvim/plugin/
 .gitignore
 nvim/.config/nvim/sessions/
+.luarc.json
