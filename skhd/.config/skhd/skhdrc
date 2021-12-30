@@ -1,9 +1,9 @@
 #! /usr/bin/bash
 
 # opens Applecation
-alt - a : open /Applications/iTerm.app
+# alt - a : open /Applications/iTerm.app
 alt - p : open /Applications/PhpStorm.app
-alt - c : open /Applications/Google Chrome.app
+alt - g : open /Applications/Google Chrome.app
 alt - s : open /Applications/Skype.app
 
 # Navigation

@@ -9,4 +9,4 @@
 [init]
 	defaultBranch = main
 [merge]
-  conflictstyle = diff
+	conflictstyle = diff3

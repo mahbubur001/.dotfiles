@@ -2,7 +2,7 @@ local M = {}
 
 function M.setup(options)
   local nls = require("null-ls")
-  nls.config({
+    local config = {
     debounce = 150,
     save_after_format = false,
     sources = {
@@ -16,8 +16,14 @@ function M.setup(options)
       nls.builtins.diagnostics.selene,
       nls.builtins.code_actions.gitsigns,
     },
-  })
-  require("lspconfig")["null-ls"].setup(options)
+  }
+  if options ~= nil then
+      for k,v in ipairs(options) do
+        table.insert(k,v)
+      end
+  end
+
+  nls.setup(config)
 end
 
 function M.has_formatter(ft)

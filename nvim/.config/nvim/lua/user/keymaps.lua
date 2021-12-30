@@ -61,6 +61,7 @@ util.vnoremap(">", ">gv")
 
 -- NvimTree
 util.nnoremap("<C-e>", ":NvimTreeToggle<CR>")
+util.nnoremap("<leader>e", ":NvimTreeToggle<CR>")
 util.inoremap("<C-e>", "<esc>:NvimTreeToggle<CR>")
 util.nnoremap("<leader>er", ":NvimTreeRefresh<CR>")
 util.nnoremap("<leader>en", ":NvimTreeFindFile<CR>")
@@ -80,3 +81,12 @@ vim.api.nvim_exec([[
 
 require('user.lspkeymaps')
 
+-- Terminal
+local Terminal  = require('toggleterm.terminal').Terminal
+local lazygit = Terminal:new({ cmd = "lazygit", direction = "float",hidden = true })
+
+function _lazygit_toggle()
+  lazygit:toggle()
+end
+
+util.nnoremap("<leader>g", "<cmd>lua _lazygit_toggle()<CR>")

@@ -40,5 +40,6 @@ local options = {
         debounce_text_changes = 150
     }
 }
+
 require("config.lsp.null-ls").setup(options)
 require("config.lsp.install").setup(servers, options)

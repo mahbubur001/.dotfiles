@@ -285,8 +285,6 @@ local function plugins(use)
         cmd = {"HopWord", "HopChar1"},
         config = function()
             require("util").nmap("gh", "<cmd>HopWord<CR>")
-            -- require("util").nmap("s", "<cmd>HopChar1<CR>")
-            -- you can configure Hop the way you like here; see :h hop-config
             require("hop").setup({})
         end
     })
@@ -307,7 +305,7 @@ local function plugins(use)
         config = function()
             require("trouble").setup({
                 auto_open = false,
-                use_lsp_diagnostic_signs = true -- en
+                use_diagnostic_signs = true -- en
             })
         end
     })
@@ -321,20 +319,11 @@ local function plugins(use)
         end
     })
 
-    use({
-        "tweekmonster/startuptime.vim",
-        cmd = "StartupTime"
-    })
+    use({"tweekmonster/startuptime.vim",cmd = "StartupTime"})
 
-    use({
-        "mbbill/undotree",
-        cmd = "UndotreeToggle"
-    })
+    use({"mbbill/undotree", cmd = "UndotreeToggle"})
 
-    use({
-        "mjlbach/babelfish.nvim",
-        module = "babelfish"
-    })
+    use({"mjlbach/babelfish.nvim",module = "babelfish"})
 
     use({
         "folke/zen-mode.nvim",
