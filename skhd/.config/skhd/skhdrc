@@ -5,6 +5,9 @@
 alt - p : open /Applications/PhpStorm.app
 alt - g : open /Applications/Google Chrome.app
 alt - s : open /Applications/Skype.app
+alt - n : open /Applications/Notes.app
+alt - f : open /System/Library/CoreServices/Finder.app/
+alt - t : tmux ls && read tmux_session && tmux attach -t ${tmux_session:-default} || tmux new -s ${tmux_session:-default}
 
 # Navigation
 alt - h : yabai -m window --focus west
