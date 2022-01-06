@@ -23,7 +23,7 @@ end
 require'lualine'.setup {
   options = {
     icons_enabled = true,
-    ttheme = "gruvbox-flat",
+    theme = "gruvbox-flat",
     component_separators = { left = '', right = ''},
     section_separators = { left = '', right = ''},
   },
@@ -31,17 +31,9 @@ require'lualine'.setup {
     lualine_a = {'mode'},
     lualine_b = {'branch'},
     lualine_c = {'diff', 'diagnostics', 'filename'},
-    lualine_x = {'filetype', lsp_progress},
+    lualine_x = { lsp_progress, 'encoding', 'filetype'},
     lualine_y = {'progress'},
-    lualine_z = {clock}
-  },
-  inactive_sections = {
-    lualine_a = {},
-    lualine_b = {},
-    lualine_c = {'filename'},
-    lualine_x = {'location'},
-    lualine_y = {},
-    lualine_z = {}
+    lualine_z = {'location', clock}
   },
   extensions = {"nvim-tree"}
 }

@@ -52,7 +52,7 @@ node_modules
 .yarn-integrity
 
 # Project build
-dist
+#dist
 
 # nextjs folder
 .next

@@ -382,6 +382,7 @@ local function plugins(use)
         module = "snap"
     })
     use("kmonad/kmonad-vim")
+
 end
 
 return packer.setup(config, plugins)

@@ -18,8 +18,8 @@ util.nnoremap("<C-S-Right>", ":vertical resize +2<CR>")
 
 
 -- Switch buffers with tab
-util.nnoremap("<S-Tab>", ":bprevious <cr>")
-util.nnoremap("<Tab>", ":bnext<cr>")
+util.nnoremap("<S-H>", ":bprevious <cr>")
+util.nnoremap("<S-l>", ":bnext<cr>")
 
 -- Insert
 util.inoremap("jk", "<ESC>");
@@ -60,11 +60,16 @@ util.vnoremap("<", "<gv")
 util.vnoremap(">", ">gv")
 
 -- NvimTree
-util.nnoremap("<C-e>", ":NvimTreeToggle<CR>")
+util.nnoremap("<C-f>", ":Telescope current_buffer_fuzzy_find fuzzy=false case_mode=ignore_case<cr>")
+util.inoremap("<C-f>", "<esc>:Telescope current_buffer_fuzzy_find fuzzy=false case_mode=ignore_case<cr>")
 util.nnoremap("<leader>e", ":NvimTreeToggle<CR>")
 util.inoremap("<C-e>", "<esc>:NvimTreeToggle<CR>")
 util.nnoremap("<leader>er", ":NvimTreeRefresh<CR>")
 util.nnoremap("<leader>en", ":NvimTreeFindFile<CR>")
+
+
+--ZenMode
+util.nnoremap("<leader>z", ":ZenMode<cr>")
 
 -- makes * and # work on visual mode too.
 vim.api.nvim_exec([[
