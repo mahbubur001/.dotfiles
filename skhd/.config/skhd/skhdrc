@@ -1,7 +1,8 @@
 #! /usr/bin/bash
 
 #opens Applecation
-alt - a : open /Applications/iTerm.app
+# alt - a : open /Applications/iTerm.app
+alt - a : open /Applications/kitty.app
 alt - p : open /Applications/PhpStorm.app
 alt - x : open /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
 alt - s : open /Applications/Skype.app
@@ -49,23 +50,23 @@ lctrl + alt - e : yabai -m space --balance
 lctrl + alt - g : yabai -m space --toggle padding; yabai -m space --toggle gap
 
 # Rotate windows clockwise and anticlockwise
-alt - r         : yabai -m space --rotate 270
-shift + alt - r : yabai -m space --rotate 90
+# alt - r         : yabai -m space --rotate 270
+# shift + alt - r : yabai -m space --rotate 90
 
 
 # Rotate on X and Y Axis
-shift + alt - x : yabai -m space --mirror x-axis
-shift + alt - y : yabai -m space --mirror y-axis
+# shift + alt - x : yabai -m space --mirror x-axis
+# shift + alt - y : yabai -m space --mirror y-axis
 
 # Set insertion point for focused container
-shift + lctrl + alt - h : yabai -m window --insert west
-shift + lctrl + alt - j : yabai -m window --insert south
-shift + lctrl + alt - k : yabai -m window --insert north
-shift + lctrl + alt - l : yabai -m window --insert east
+# shift + lctrl + alt - h : yabai -m window --insert west
+# shift + lctrl + alt - j : yabai -m window --insert south
+# shift + lctrl + alt - k : yabai -m window --insert north
+# shift + lctrl + alt - l : yabai -m window --insert east
 
 # Float / Unfloat window
-shift + alt - space : \
-    yabai -m window --toggle float; \
+# shift + alt - space : \
+#     yabai -m window --toggle float; \
 
 
 # Restart Yabai
@@ -75,5 +76,11 @@ shift + lctrl + alt - r : \
     launchctl kickstart -k "gui/${UID}/homebrew.mxcl.yabai"
 
 # Make window native fullscreen
-alt - f         : yabai -m window --toggle zoom-fullscreen
-shift + alt - f : yabai -m window --toggle native-fullscreen yabai -m window --toggle border
+# alt - f         : yabai -m window --toggle zoom-fullscreen
+# shift + alt - f : yabai -m window --toggle native-fullscreen yabai -m window --toggle border
+
+.blacklist [
+    "terminal"
+    "qutebrowser"
+    "kitty"
+]
