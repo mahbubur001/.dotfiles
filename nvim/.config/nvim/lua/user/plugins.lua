@@ -79,8 +79,8 @@ local function plugins(use)
             run = 'cd lua/fzy && make'
         },
         config = function()
-            require("config.navigator")
-        end
+          require'navigator'.setup()
+         end
     })
 
     use({

@@ -44,6 +44,7 @@ util.nnoremap("<C-Q>", ":x <CR>");
 util.vnoremap("<C-Q>", ":x <CR>")
 util.inoremap("<C-Q>", "<ESC>:x <CR>")
 -- File open
+util.nnoremap("<D-p>", ":Telescope find_files<cr>");
 util.nnoremap("<C-p>", ":Telescope find_files<cr>");
 util.vnoremap("<C-p>", ":Telescope find_files<cr>")
 util.inoremap("<C-p>", "<ESC>:Telescope find_files<cr>")

@@ -1,6 +1,6 @@
 #! /usr/bin/bash
 
-#opens Applecation
+# opens Applecation
 # alt - a : open /Applications/iTerm.app
 # open terminal, blazingly fast compared to iTerm/Hyper
 cmd - return : open /Applications/kitty.app
@@ -77,8 +77,8 @@ shift + lctrl + alt - r : \
 
 # Make window native fullscreen
 shift + alt - f         : yabai -m window --toggle zoom-fullscreen
-shift + alt - enter : yabai -m window --toggle native-fullscreen yabai -m window --toggle border
-
+shift + alt - return : yabai -m window --toggle native-fullscreen yabai -m window --toggle border
+#
 .blacklist [
     "terminal"
     "qutebrowser"
