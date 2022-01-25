@@ -73,17 +73,6 @@ local function plugins(use)
     })
 
     use({
-        'ray-x/navigator.lua',
-        requires = {
-            'ray-x/guihua.lua',
-            run = 'cd lua/fzy && make'
-        },
-        config = function()
-          require'navigator'.setup()
-         end
-    })
-
-    use({
         "simrat39/symbols-outline.nvim",
         cmd = {"SymbolsOutline"}
     })
