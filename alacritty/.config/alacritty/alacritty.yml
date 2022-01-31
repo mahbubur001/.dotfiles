@@ -1,0 +1,36 @@
+# Font configuration (changes require restart)
+shell:
+  program: /usr/local/bin/tmux
+  args:
+    - new
+    - -A
+    - -s main
+
+font:
+  size: 15
+  normal:
+    family: JetBrainsMono Nerd Font
+  glyph_offset:
+    y: 1
+  use_thin_strokes: true
+
+window:
+   decorations: buttonless
+env:
+  LC_ALL: en_US.UTF-8
+  LANG: en_US.UTF-8
+
+draw_bold_text_with_bright_colors: true
+
+live_config_reload: true
+
+key_bindings:
+    # shortcuts for tmux. the leader key is control-b (0x02)
+  - { key: W,        mods: Command,       chars: "\x02&"                       }  # close tab (kill)
+  - { key: T,        mods: Command,       chars: "\x02c"                       }  # new tab
+  - { key: RBracket, mods: Command|Shift, chars: "\x02n"                       }  # select next tab
+  - { key: LBracket, mods: Command|Shift, chars: "\x02p"                       }  # select previous tab
+  - { key: RBracket, mods: Command,       chars: "\x02o"                       }  # select next pane
+  - { key: LBracket, mods: Command,       chars: "\x02;"                       }  # select last (previously used) pane
+  - { key: F,        mods: Command,       chars: "\x02/"                       }  # search (upwards) (see tmux.conf)
+

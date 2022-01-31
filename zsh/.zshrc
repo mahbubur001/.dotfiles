@@ -155,3 +155,4 @@ alias cds='find . -name '.DS_Store' -type f -delete'
 export PATH="/usr/local/opt/php@7.4/bin:$PATH"
 
 export PATH="/usr/local/sbin:$PATH"
+eval "$(starship init zsh)"
