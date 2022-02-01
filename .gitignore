@@ -1,4 +1,5 @@
 nvim/.config/nvim/plugin/
+tmux/.config/tmux/plugins/
 .gitignore
 nvim/.config/nvim/sessions/
 .luarc.json
