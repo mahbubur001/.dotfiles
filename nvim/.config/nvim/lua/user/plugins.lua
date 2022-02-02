@@ -371,7 +371,12 @@ local function plugins(use)
         module = "snap"
     })
     use("kmonad/kmonad-vim")
-
+    use({
+      "christoomey/vim-tmux-navigator",
+       config = function()
+          vim.g.tmux_navigator_no_mappings = 1
+       end
+    })
 end
 
 return packer.setup(config, plugins)

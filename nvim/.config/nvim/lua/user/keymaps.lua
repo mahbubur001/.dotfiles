@@ -5,11 +5,10 @@ local util = require("util")
 vim.o.timeoutlen = 400
 
 -- Move to window using the <ctrl> movement keys
-util.nmap("<C-h>", "<C-w>h")
-util.nmap("<C-j>", "<C-w>j")
-util.nmap("<C-k>", "<C-w>k")
-util.nmap("<C-l>", "<C-w>l")
-
+util.nmap("<C-h>", ":TmuxNavigateLeft<cr>")
+util.nmap("<C-j>", ":TmuxNavigateDown<cr>")
+util.nmap("<C-k>", ":TmuxNavigateUp<cr>")
+util.nmap("<C-l>", ":TmuxNavigateRight<cr>")
 -- Resize window using <ctrl> arrow keys
 util.nnoremap("<C-S-Up>", ":resize +2<CR>")
 util.nnoremap("<C-S-Down>", ":resize -2<CR>")

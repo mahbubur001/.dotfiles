@@ -5,7 +5,107 @@
 # open terminal, blazingly fast compared to iTerm/Hyper
 cmd - return : open /Applications/Alacritty.app
 alt - p : open /Applications/PhpStorm.app
-alt - x : open /Applications/Google Chrome.app
+alt - b : open /Applications/Google\ Chrome.app
 alt - s : open /Applications/Skype.app
-alt - n : open /Applications/Notes.app
-alt - f : open /System/Library/CoreServices/Finder.app/
+alt - d : open /System/Library/CoreServices/Finder.app
+
+
+# Navigation
+alt - h : yabai -m window --focus west
+alt - j : yabai -m window --focus south
+alt - k : yabai -m window --focus north
+alt - l : yabai -m window --focus east
+
+# Moving windows
+shift + alt - h : yabai -m window --warp west
+shift + alt - j : yabai -m window --warp south
+shift + alt - k : yabai -m window --warp north
+shift + alt - l : yabai -m window --warp east
+
+# Move focus container to workspace
+# shift + alt - m : yabai -m window --space last; yabai -m space --focus last
+# shift + alt - p : yabai -m window --space prev; yabai -m space --focus prev
+# shift + alt - n : yabai -m window --space next; yabai -m space --focus next
+shift + alt - 1 : yabai -m window --space 1; yabai -m space --focus 1
+shift + alt - 2 : yabai -m window --space 2; yabai -m space --focus 2
+shift + alt - 3 : yabai -m window --space 3; yabai -m space --focus 3
+shift + alt - 4 : yabai -m window --space 4; yabai -m space --focus 4
+
+# Resize windows
+lctrl + alt - h : yabai -m window --resize left:-50:0; \
+                  yabai -m window --resize right:-50:0
+lctrl + alt - j : yabai -m window --resize bottom:0:50; \
+                  yabai -m window --resize top:0:50
+lctrl + alt - k : yabai -m window --resize top:0:-50; \
+                  yabai -m window --resize bottom:0:-50
+lctrl + alt - l : yabai -m window --resize right:50:0; \
+                  yabai -m window --resize left:50:0
+
+# Rotate on X and Y axes
+shift + alt - x : yabai -m space --mirror x-axis
+shift + alt - y : yabai -m space --mirror y-axis
+
+
+# ---------Window---------
+# Toggle window focus
+shift + ctrl + alt + cmd - h : yabai -m window --focus west 
+shift + ctrl + alt + cmd - j : yabai -m window --focus south
+shift + ctrl + alt + cmd - k : yabai -m window --focus north
+shift + ctrl + alt + cmd - l : yabai -m window --focus east
+shift + ctrl + alt + cmd - r : yabai -m window --focus recent
+
+# move windows
+shift + alt - h : yabai -m window --warp west
+shift + alt - j : yabai -m window --warp south
+shift + alt - k : yabai -m window --warp north
+shift + alt - l : yabai -m window --warp east
+
+# Move window to another Space
+alt + ctrl - l : yabai -m window --space next && yabai -m space --focus next
+alt + ctrl - h : yabai -m window --space prev && yabai -m space --focus prev
+
+#Equalize window size
+shift + alt - e : yabai -m space --balance 
+
+
+# Rotate the window clockwise and counterclockwise
+alt - r         : yabai -m space --rotate 270
+shift + alt - r : yabai -m space --rotate 90
+
+# resize window
+shift + ctrl + alt + cmd - left : yabai -m window --resize left:-50:0; \
+                  yabai -m window --resize right:-50:0
+shift + ctrl + alt + cmd - down : yabai -m window --resize bottom:0:50; \
+                  yabai -m window --resize top:0:50
+shift + ctrl + alt + cmd - up : yabai -m window --resize top:0:-50; \
+                  yabai -m window --resize bottom:0:-50
+shift + ctrl + alt + cmd - right : yabai -m window --resize right:50:0; \
+                  yabai -m window --resize left:50:0
+
+
+# Sets the insertion point of the focus container
+shift + lctrl + alt - h : yabai -m window --insert west
+shift + lctrl + alt - j : yabai -m window --insert south
+shift + lctrl + alt - k : yabai -m window --insert north
+shift + lctrl + alt - l : yabai -m window --insert east
+
+# Floating / non floating window
+shift + alt - space : \
+    yabai -m window --toggle float; \
+    yabai -m window --toggle border
+
+# Window full screen display
+shift + ctrl + alt + cmd - f : yabai -m window --toggle zoom-fullscreen
+alt - f         : yabai -m window --toggle zoom-fullscreen
+shift + alt - f : yabai -m window --toggle native-fullscreen
+#Switch between vertical and horizontal split layout
+shift + ctrl + alt + cmd - s : yabai -m window --toggle split
+
+#---------yabai other options---------------
+# Restart Yabai
+shift + lctrl + alt - r : \
+    /usr/bin/env osascript <<< \
+        "display notification \"Restarting Yabai\" with title \"Yabai\""; \
+    launchctl kickstart -k "gui/${UID}/homebrew.mxcl.yabai"
+#Toggles whether the current window border is displayed
+shift + lctrl + alt - b : yabai -m window --toggle border 
