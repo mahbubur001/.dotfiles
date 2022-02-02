@@ -41,53 +41,15 @@ lctrl + alt - k : yabai -m window --resize top:0:-50; \
 lctrl + alt - l : yabai -m window --resize right:50:0; \
                   yabai -m window --resize left:50:0
 
+# Equalize size of windows
+lctrl + alt - e : yabai -m space --balance
+
+# Enable / Disable gaps in current workspace
+lctrl + alt - g : yabai -m space --toggle padding; yabai -m space --toggle gap
+
 # Rotate on X and Y axes
 shift + alt - x : yabai -m space --mirror x-axis
 shift + alt - y : yabai -m space --mirror y-axis
-
-
-# ---------Window---------
-# Toggle window focus
-shift + ctrl + alt + cmd - h : yabai -m window --focus west 
-shift + ctrl + alt + cmd - j : yabai -m window --focus south
-shift + ctrl + alt + cmd - k : yabai -m window --focus north
-shift + ctrl + alt + cmd - l : yabai -m window --focus east
-shift + ctrl + alt + cmd - r : yabai -m window --focus recent
-
-# move windows
-shift + alt - h : yabai -m window --warp west
-shift + alt - j : yabai -m window --warp south
-shift + alt - k : yabai -m window --warp north
-shift + alt - l : yabai -m window --warp east
-
-# Move window to another Space
-alt + ctrl - l : yabai -m window --space next && yabai -m space --focus next
-alt + ctrl - h : yabai -m window --space prev && yabai -m space --focus prev
-
-#Equalize window size
-shift + alt - e : yabai -m space --balance 
-
-
-# Rotate the window clockwise and counterclockwise
-alt - r         : yabai -m space --rotate 270
-shift + alt - r : yabai -m space --rotate 90
-
-# resize window
-shift + ctrl + alt + cmd - left : yabai -m window --resize left:-50:0; \
-                  yabai -m window --resize right:-50:0
-shift + ctrl + alt + cmd - down : yabai -m window --resize bottom:0:50; \
-                  yabai -m window --resize top:0:50
-shift + ctrl + alt + cmd - up : yabai -m window --resize top:0:-50; \
-                  yabai -m window --resize bottom:0:-50
-shift + ctrl + alt + cmd - right : yabai -m window --resize right:50:0; \
-                  yabai -m window --resize left:50:0
-
-
-# Sets the insertion point of the focus container
-shift + lctrl + alt - h : yabai -m window --insert west
-shift + lctrl + alt - j : yabai -m window --insert south
-shift + lctrl + alt - k : yabai -m window --insert north
-shift + lctrl + alt - l : yabai -m window --insert east
 
 # Floating / non floating window
 shift + alt - space : \
@@ -107,5 +69,4 @@ shift + lctrl + alt - r : \
     /usr/bin/env osascript <<< \
         "display notification \"Restarting Yabai\" with title \"Yabai\""; \
     launchctl kickstart -k "gui/${UID}/homebrew.mxcl.yabai"
-#Toggles whether the current window border is displayed
-shift + lctrl + alt - b : yabai -m window --toggle border 
+
