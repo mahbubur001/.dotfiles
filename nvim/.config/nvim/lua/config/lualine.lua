@@ -20,30 +20,6 @@ local function lsp_progress(self, is_active)
     return table.concat(status, " | ") .. " " .. spinners[frame + 1]
 end
 
--- require'lualine'.setup {
---   options = {
---     icons_enabled = true,
---     theme = "gruvbox-flat",
---     component_separators = { left = '', right = ''},
---     section_separators = { left = '', right = ''},
---   },
---   sections = {
---     lualine_a = {'mode'},
---     lualine_b = {'branch'},
---     lualine_c = {'diff', 'diagnostics', 'filename'},
---     lualine_x = { lsp_progress, 'encoding', 'filetype'},
---     lualine_y = {'progress'},
---     lualine_z = {'location', clock}
---   },
---   extensions = {"nvim-tree"}
--- }
---
-
--- Eviline config for lualine
--- Author: shadmansaleh
--- Credit: glepnir
-local lualine = require('lualine')
-
 -- Color table for highlights
 -- stylua: ignore
 local colors = {
@@ -73,6 +49,69 @@ local conditions = {
     return gitdir and #gitdir > 0 and #gitdir < #filepath
   end,
 }
+
+require'lualine'.setup {
+  options = {
+    icons_enabled = true,
+    theme = "gruvbox-flat",
+    component_separators = { left = '', right = ''},
+    section_separators = { left = '', right = ''},
+  },
+  sections = {
+    lualine_a = {'mode'},
+    lualine_b = {'branch'},
+    lualine_c = {{
+      'diff',
+      -- Is it me or the symbol for modified us really weird
+      symbols = { added = ' ', modified = '柳 ', removed = ' ' },
+      diff_color = {
+        added = { fg = colors.green },
+        modified = { fg = colors.orange },
+        removed = { fg = colors.red },
+      },
+      cond = conditions.hide_in_width,
+    }, {
+      'diagnostics',
+      sources = { 'nvim_diagnostic' },
+      symbols = { error = ' ', warn = ' ', info = ' ' },
+      diagnostics_color = {
+        color_error = { fg = colors.red },
+        color_warn = { fg = colors.yellow },
+        color_info = { fg = colors.cyan },
+      },
+    }, 'filename', {
+  -- Lsp server name .
+      function()
+        local msg = ''
+        local buf_ft = vim.api.nvim_buf_get_option(0, 'filetype')
+        local clients = vim.lsp.get_active_clients()
+        if next(clients) == nil then
+          return msg
+        end
+        for _, client in ipairs(clients) do
+          local filetypes = client.config.filetypes
+          if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
+            return client.name
+          end
+        end
+        return msg
+      end,
+      icon = ' ',
+    }
+    },
+    lualine_x = { lsp_progress, 'encoding', 'filetype'},
+    lualine_y = {'progress'},
+    lualine_z = {'location', 'filesize'}
+  },
+  extensions = {"nvim-tree"}
+}
+
+-- Eviline config for lualine
+-- Author: shadmansaleh
+-- Credit: glepnir
+local lualine = require('lualine')
+
+
 
 -- Config
 local config = {
@@ -258,4 +297,4 @@ ins_right({
 })
 
 -- Now don't forget to initialize lualine
-lualine.setup(config)
+-- lualine.setup(config)
