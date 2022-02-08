@@ -67,6 +67,9 @@ yabai -m rule --add label="Safari" app="^Safari$" title="^(General|(Tab|Password
 yabai -m rule --add label="PhpStorm" app="^PhpStorm$" title="^(Development)$" manage=off
 yabai -m rule --add label="TablePlus" app="^TablePlus$" manage=off
 yabai -m rule --add label="Local" app="^Local$" manage=off
+yabai -m rule --add label="Docker Desktop" app="^Docker Desktop$" manage=off
+yabai -m rule --add label="Nots" app="^Nots$" manage=off
+yabai -m rule --add label="DevKinsta" app="^DevKinsta$" manage=off
 yabai -m rule --add label="System Preferences" app="^System Preferences$" manage=off
 yabai -m rule --add label="Skype" app="^Skype$" manage=off
 yabai -m rule --add label="App Store" app="^App Store$" manage=off

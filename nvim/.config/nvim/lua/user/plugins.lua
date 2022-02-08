@@ -100,12 +100,13 @@ local function plugins(use)
         config = [[require('config.treesitter')]]
     })
 
+
     use {
-        "eddyekofo94/gruvbox-flat.nvim",
-        config = function()
-            require("config.gruvbox")
-        end
-    }
+      "eddyekofo94/gruvbox-flat.nvim",
+      config = function()
+          require("config.gruvbox")
+      end
+    } 
 
     -- Theme: icons
     use {
