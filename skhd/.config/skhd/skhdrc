@@ -3,7 +3,8 @@
 # opens Applecation
 # alt - a : open /Applications/iTerm.app
 # open terminal, blazingly fast compared to iTerm/Hyper
-cmd - return : open /Applications/kitty.app
+# cmd - return : open /Applications/kitty.app
+cmd - return : open /Applications/iTerm.app
 alt - p : open /Applications/PhpStorm.app
 alt - b : open /Applications/Google\ Chrome.app
 alt - s : open /Applications/Skype.app
