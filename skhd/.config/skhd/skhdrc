@@ -9,6 +9,7 @@ alt - p : open /Applications/PhpStorm.app
 alt - b : open /Applications/Google\ Chrome.app
 alt - s : open /Applications/Skype.app
 alt - f : open /System/Library/CoreServices/Finder.app
+alt - e : open /Applications/Visual\ Studio\ Code.app
 
 
 # Navigation
