@@ -3,7 +3,7 @@
 use PhpCsFixer\Config;
 
 $rules = [
-	'@PSR2'                          => true,
+	'WordPress'                      => true,
 	'array_syntax'                   => ['syntax' => 'short'],
 	'binary_operator_spaces'         => [
 		'default'   => 'single_space',
