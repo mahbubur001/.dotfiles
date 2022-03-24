@@ -1,6 +1,12 @@
 <?php
 
 use PhpCsFixer\Config;
+use PhpCsFixer\Finder;
+
+$finder = Finder::create()
+  ->exclude(['bootstrap', 'node_modules', 'public', 'storage', 'vendor'])
+  ->notPath('*')
+  ->in(__DIR__);
 
 $rules = [
   '@PSR2'                          => true,
@@ -153,7 +159,7 @@ $rules = [
 ];
 
 return (new Config())
-  // ->setFinder($finder)
+  ->setFinder($finder)
   ->setIndent("\t")
   ->setLineEnding("\n")
   ->setRules($rules)
