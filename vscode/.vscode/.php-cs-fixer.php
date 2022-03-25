@@ -26,11 +26,11 @@ $rules = [
 	// 	'comment_type' => 'all_multiline',
 	//   ],
 	'php_unit_dedicate_assert'                      => ['target' => '5.6'],
-	//   'phpdoc_no_empty_return'                        => false,
-	//   'phpdoc_to_comment'                             => false,
 	'single_line_comment_style'                     => [
 		'comment_types' => ['asterisk', 'hash'],
 	],
+	'phpdoc_no_empty_return'                        => false,
+	'phpdoc_to_comment'                             => false,
 ];
 
 return (new Config())
