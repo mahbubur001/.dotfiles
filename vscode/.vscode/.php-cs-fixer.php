@@ -31,6 +31,7 @@ $rules = [
 	],
 	'phpdoc_no_empty_return'                        => false,
 	'phpdoc_to_comment'                             => false,
+	'phpdoc_summary'                                => false,
 ];
 
 return (new Config())
