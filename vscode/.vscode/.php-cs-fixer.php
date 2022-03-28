@@ -21,7 +21,10 @@ $rules = [
 	'blank_line_after_opening_tag' => false, // <?php tag
 	'increment_style'              => ['style' => 'post'],
 	'linebreak_after_opening_tag'  => false, // <?php tag
-
+	'braces'                       => [
+		'allow_single_line_closure'                   => true,
+		'position_after_functions_and_oop_constructs' => 'same',
+	],
 	//   'align_multiline_comment' => [
 	// 	'comment_type' => 'all_multiline',
 	//   ],
