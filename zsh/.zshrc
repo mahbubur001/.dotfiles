@@ -149,6 +149,7 @@ alias gs='git status -s'
 alias gss='git status'
 alias gagcgp='git add . && git commit && git push'
 alias cds='find . -name '.DS_Store' -type f -delete'
+alias cppwd='pwd|pbcopy'
 # # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
