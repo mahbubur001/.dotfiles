@@ -10,7 +10,7 @@ $finder = Finder::create()
   ->in(__DIR__);
 
 $rules = [
-	'@Symfony'               => true,
+	'@PSR2'                  => true,
 	'array_indentation'      => true,
 	'binary_operator_spaces' => [
 		'operators' => [
