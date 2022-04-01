@@ -1,3 +1,7 @@
-local npairs = require("nvim-autopairs")
-
-npairs.setup()
+-- include nvim-autopairs
+require('nvim-autopairs').setup()
+ 
+require("nvim-autopairs.completion.compe").setup({
+  map_cr = true,
+  map_complete = true
+})
