@@ -66,10 +66,7 @@ util.vnoremap("<", "<gv")
 util.vnoremap(">", ">gv")
 
 -- NvimTree
-util.nnoremap("<C-f>", ":Telescope current_buffer_fuzzy_find fuzzy=false case_mode=ignore_case<cr>")
-util.inoremap("<C-f>", "<esc>:Telescope current_buffer_fuzzy_find fuzzy=false case_mode=ignore_case<cr>")
 util.nnoremap("<leader>e", ":NvimTreeToggle<CR>")
-util.inoremap("<C-e>", "<esc>:NvimTreeToggle<CR>")
 util.nnoremap("<leader>er", ":NvimTreeRefresh<CR>")
 util.nnoremap("<leader>en", ":NvimTreeFindFile<CR>")
 

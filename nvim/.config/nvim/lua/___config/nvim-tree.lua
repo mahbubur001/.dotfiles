@@ -29,8 +29,7 @@ require'nvim-tree'.setup {
     cmd  = nil,
     args = {}
   },
-
-  view = {
+   view = {
     width = 30,
     height = 30,
     side = 'left',
@@ -41,4 +40,3 @@ require'nvim-tree'.setup {
     }
   }
 }
-vim.cmd("let g:nvim_tree_quit_on_open = 1")

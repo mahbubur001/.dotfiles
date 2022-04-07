@@ -1,36 +1,49 @@
 vim.g.mapleader = ' '
 
+local util = require("util")
+
 map = vim.api.nvim_set_keymap
 
-vim.o.timeoutlen = 400
+-- vim.o.timeoutlen = 400
 
 
 
-map("n", "<C-e>", ":NvimTreeToggle<CR>", {silent = true })
 map("n", "<leader>e", ":NvimTreeToggle<CR>", {silent = true })
+
+map('n', '<C-p>', ':Telescope find_files<CR>', { noremap = true, silent = true })
+map('n', '<C-e>', ':Telescope oldfiles<CR>', { noremap = true, silent = true })
 
 map("n", "<leader>md", ":MarkdownPreviewToggle<CR>", {silent = true })
 map('n', '<Leader><Space>', ':noh<CR>', { noremap = true, silent = true })
 
--- local util = require("util")
--- -- Move to window using the <ctrl> movement keys
--- util.nmap("<C-h>", ":TmuxNavigateLeft<cr>")
--- util.nmap("<C-j>", ":TmuxNavigateDown<cr>")
--- util.nmap("<C-k>", ":TmuxNavigateUp<cr>")
--- util.nmap("<C-l>", ":TmuxNavigateRight<cr>")
+
+
+
+map('n', '<Leader>dd', ':ToggleDiag<CR>', { noremap = true, silent = true })
+map("n", "<leader>du", "<Plug>(toggle-lsp-diag-underline)", {silent = true })
+map("n", "<leader>ds", "<Plug>(toggle-lsp-diag-signs)", {silent = true })
+map("n", "<leader>dv", "<Plug>(toggle-lsp-diag-vtext)", {silent = true })
+map("n", "<leader>di", "<Plug>(toggle-lsp-diag-update_in_insert)", {silent = true })
+
+
+-- Move to window using the <ctrl> movement keys
+util.nmap("<C-h>", ":TmuxNavigateLeft<cr>")
+util.nmap("<C-j>", ":TmuxNavigateDown<cr>")
+util.nmap("<C-k>", ":TmuxNavigateUp<cr>")
+util.nmap("<C-l>", ":TmuxNavigateRight<cr>")
 -- -- Resize window using <ctrl> arrow keys
 -- util.nnoremap("<C-S-Up>", ":resize +2<CR>")
 -- util.nnoremap("<C-S-Down>", ":resize -2<CR>")
 -- util.nnoremap("<C-S-Left>", ":vertical resize -2<CR>")
 -- util.nnoremap("<C-S-Right>", ":vertical resize +2<CR>")
 
--- -- Switch buffers with tab
--- util.nnoremap("<S-H>", ":bprevious <cr>")
--- util.nnoremap("<S-l>", ":bnext<cr>")
+-- Switch buffers with tab
+util.nnoremap("<S-H>", ":bprevious <cr>")
+util.nnoremap("<S-l>", ":bnext<cr>")
 
 -- -- Insert
--- util.inoremap("jk", "<ESC>");
--- util.inoremap("kj", "<ESC>");
+util.inoremap("jk", "<ESC>");
+util.inoremap("kj", "<ESC>");
 
 -- -- Easier pasting
 -- util.nnoremap("[p", ":pu!<cr>")
@@ -42,14 +55,14 @@ map('n', '<Leader><Space>', ':noh<CR>', { noremap = true, silent = true })
 -- util.xnoremap("gw", "*N")
 
 -- -- Saves & Quite
--- util.nnoremap("<C-s>", ":w <CR>");
--- util.vnoremap("<C-s>", ":w <CR>")
--- util.inoremap("<C-s>", "<ESC>:w <CR>")
--- util.nnoremap("<C-c>", "<ESC> <CR>")
+util.nnoremap("<C-s>", ":w <CR>");
+util.vnoremap("<C-s>", ":w <CR>")
+util.inoremap("<C-s>", "<ESC>:w <CR>")
+util.nnoremap("<C-c>", "<ESC> <CR>")
 
--- util.nnoremap("<C-Q>", ":x <CR>");
--- util.vnoremap("<C-Q>", ":x <CR>")
--- util.inoremap("<C-Q>", "<ESC>:x <CR>")
+util.nnoremap("<C-Q>", ":x <CR>");
+util.vnoremap("<C-Q>", ":x <CR>")
+util.inoremap("<C-Q>", "<ESC>:x <CR>")
 
 -- -- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
 -- util.nnoremap("n", "'Nn'[v:searchforward]", {

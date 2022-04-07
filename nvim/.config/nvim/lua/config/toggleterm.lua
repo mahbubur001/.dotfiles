@@ -1,16 +1,11 @@
--- include toggleterm
-require("toggleterm").setup{
-  size = 15,
-  open_mapping = '<F1>',
-  hide_numbers = true,
-  shade_filetypes = {},
-  shade_terminals = true,
-  shading_factor = 1,
-  start_in_insert = true,
-  insert_mappings = true,
-  persist_size = true,
-  direction = 'horizontal',
-  close_on_exit = true,
-  shell = vim.o.shell, -- change the default shell
-}
-
+require("toggleterm").setup({
+    size = 20,
+    hide_numbers = true,
+    open_mapping = [[<c-\>]],
+    shade_filetypes = {},
+    shade_terminals = false,
+    shading_factor = 0.3, -- the degree by which to darken to terminal colour, default: 1 for dark backgrounds, 3 for light
+    start_in_insert = true,
+    persist_size = true,
+    direction = "horizontal"
+})

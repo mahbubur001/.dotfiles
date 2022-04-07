@@ -378,6 +378,8 @@ local function plugins(use)
           vim.g.tmux_navigator_no_mappings = 1
        end
     })
+
+    use "Pocco81/AutoSave.nvim"
 end
 
 return packer.setup(config, plugins)

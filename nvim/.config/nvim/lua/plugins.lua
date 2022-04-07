@@ -26,6 +26,10 @@ return require('packer').startup(function(use)
     use "Pocco81/AutoSave.nvim"
     use {'turbio/bracey.vim', run = 'cd app & npm install --prefix server'}
     use {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install'}
+
+    
+    use {'ray-x/navigator.lua', requires = {'ray-x/guihua.lua', run = 'cd lua/fzy && make'}}
+
   
     use {
       'lewis6991/gitsigns.nvim',
@@ -42,16 +46,6 @@ return require('packer').startup(function(use)
     use {
       'akinsho/nvim-bufferline.lua',
       requires = 'kyazdani42/nvim-web-devicons'
-    }
-  
-    use {
-      'p00f/cphelper.nvim',
-      rocks = 'http',
-      requires = {
-        'nvim-lua/plenary.nvim',
-        'ygm2/rooter.nvim',
-        opt = true
-      }
     }
   
     use {
