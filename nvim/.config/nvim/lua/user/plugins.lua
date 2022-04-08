@@ -379,7 +379,12 @@ local function plugins(use)
        end
     })
 
-    use "Pocco81/AutoSave.nvim"
+    use({
+      "Pocco81/AutoSave.nvim",
+      config = function()
+        require('config.autosave')
+      end
+    })
 end
 
 return packer.setup(config, plugins)

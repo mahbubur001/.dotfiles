@@ -105,15 +105,15 @@ util.nnoremap("<Leader><Space>", M.project_files)
 util.nnoremap("<Leader>vrc", M.search_dotfiles)
 util.nnoremap("<C-p>", M.project_files)
 util.nnoremap("<Leader>fd", function()
-    require("telescope.builtin").git_files({
-        cwd = "~/.dotfiles"
-    })
+require("telescope.builtin").git_files({
+    cwd = "~/.dotfiles"
+})
 end)
 
 util.nnoremap("<leader>fz", function()
-    require("telescope").extensions.z.list({
-        cmd = {vim.o.shell, "-c", "zoxide query -ls"}
-    })
+require("telescope").extensions.z.list({
+    cmd = {vim.o.shell, "-c", "zoxide query -ls"}
+})
 end)
 
 util.nnoremap("<leader>pp", ":lua require'telescope'.extensions.project.project{}<CR>")

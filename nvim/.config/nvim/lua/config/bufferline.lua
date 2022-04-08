@@ -3,7 +3,6 @@ require("bufferline").setup({
         show_close_icon = true,
         diagnostics = "nvim_lsp",
         always_show_bufferline = true,
-        separator_style = "slant",
         diagnostics_indicator = function(_, _, diagnostics_dict)
             local s = " "
             for e, n in pairs(diagnostics_dict) do
