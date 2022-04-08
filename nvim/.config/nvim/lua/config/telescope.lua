@@ -36,7 +36,7 @@ telescope.setup({
 -- telescope.load_extension("frecency")
 telescope.load_extension("fzy_native")
 telescope.load_extension("z")
--- telescope.load_extension("project")
+telescope.load_extension("project")
 
 local M = {}
 
@@ -70,6 +70,9 @@ M.find_in_current_buffer = function()
 		prompt_title = "Find at current file",
 		case_mode = 'ignore_case',
 		fuzzy = false,
+    previewer = false,
+    shorten_path = true,
+    layout_strategy = "horizontal"
 	})
 end
 M.find_tags_in_current_buffer = function()
@@ -77,6 +80,10 @@ M.find_tags_in_current_buffer = function()
 		prompt_title = "Find tags",
 		case_mode = 'ignore_case',
 		fuzzy = false,
+    previewer = false,
+    shorten_path = true,
+    layout_strategy = "horizontal"
+
 	})
 end
 
