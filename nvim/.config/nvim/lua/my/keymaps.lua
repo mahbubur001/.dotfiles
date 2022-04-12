@@ -42,6 +42,17 @@ util.nnoremap("<C-Q>", ":x <CR>");
 util.vnoremap("<C-Q>", ":x <CR>")
 util.inoremap("<C-Q>", "<ESC>:x <CR>")
 
+-- CMD
+vim.api.nvim_set_keymap('n', 'S4', '0', { noremap = true })
+vim.api.nvim_set_keymap('n', '12', '$', { noremap = true })
+vim.api.nvim_set_keymap('i', 'S4', '<Esc>0i', { noremap = true })
+vim.api.nvim_set_keymap('i', '12', '<Esc>$a', { noremap = true })
+-- ALT
+vim.api.nvim_set_keymap('n', 'S591', 'b', { noremap = true })
+vim.api.nvim_set_keymap('n', 'Q949', 'w', { noremap = true })
+vim.api.nvim_set_keymap('i', 'S591', '<Esc>bi', { noremap = true })
+vim.api.nvim_set_keymap('i', 'Q949', '<Esc>wwi', { noremap = true })
+
 -- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
 util.nnoremap("n", "'Nn'[v:searchforward]", {
     expr = true
