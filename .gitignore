@@ -3,3 +3,4 @@ tmux/.config/tmux/plugins/
 .gitignore
 nvim/.config/nvim/sessions/
 .luarc.json
+**.cache
