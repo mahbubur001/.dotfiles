@@ -5,6 +5,8 @@
     <config name="minimum_supported_wp_version" value="5.2"/>
     <!-- Minimum WP Version -->
     <config name="testVersion" value="7.2-"/>
+    <!-- PHPCompatibility -->
+    <rule ref="PHPCompatibilityWP" />
 
     <file>.</file>
     <!-- Exclude paths -->
