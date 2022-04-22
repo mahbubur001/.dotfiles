@@ -1,12 +1,18 @@
 <?xml version="1.0"?>
 <ruleset name="PHPCS Coding Standards">
+    <!--
+    https://github.com/squizlabs/PHP_CodeSniffer
+    https://github.com/WordPress/WordPress-Coding-Standards
+    https://github.com/PHPCompatibility/PHPCompatibility
+    https://github.com/PHPCompatibility/PHPCompatibilityWP
+    -->
     <description>PHPCS dev PHP_CodeSniffer ruleset</description>
     <!-- Whenever possible, cache the scan results and re-use those for unchanged files on the next scan. -->
     <config name="minimum_supported_wp_version" value="5.2"/>
     <!-- Minimum WP Version -->
     <config name="testVersion" value="7.2-"/>
     <!-- PHPCompatibility -->
-    <rule ref="PHPCompatibilityWP" />
+    <rule ref="PHPCompatibilityWP"/>
 
     <file>.</file>
     <!-- Exclude paths -->
