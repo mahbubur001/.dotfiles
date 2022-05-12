@@ -1,3 +1,4 @@
+-- Reference : https://github.com/NvChad/NvChad
 local present, impatient = pcall(require, "impatient")
 
 if present then

@@ -12,7 +12,7 @@
     <!-- Minimum WP Version -->
     <config name="testVersion" value="7.2-"/>
     <!-- PHPCompatibility -->
-    <rule ref="PHPCompatibilityWP"/>
+    <!-- <rule ref="PHPCompatibilityWP"/> -->
 
     <file>.</file>
     <!-- Exclude paths -->
