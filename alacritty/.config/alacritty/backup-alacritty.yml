@@ -1,0 +1,51 @@
+# Font configuration (changes require restart)
+shell:
+  # program: /usr/local/bin/zsh
+  # args:
+  #   - -l
+  #   - -c
+  #   - "tmux attach || tmux"
+
+font:
+  size: 15
+  normal:
+    family: JetBrainsMono Nerd Font
+    style: Regular
+  offset:
+    y: 1
+    x: 1
+  use_thin_strokes: true
+  draw_bold_text_with_bright_colors: true
+
+window:
+  dynamic_padding: false
+  decorations: buttonless
+
+scrolling:
+  history: 2000
+  multiplier: 3
+
+env:
+  TERM: xterm-256color
+
+live_config_reload: true
+
+key_bindings:
+  - { key: K, mods: Command, command: { program: "/usr/bin/clear" } }
+  - { key: Return, mods: Command|Shift, action: SpawnNewInstance }
+    # shortcuts for tmux. the leader key is control-a (0x01) or control-b (0x02)
+  - { key: W,        mods: Command,       chars: "\x01d"    }  # Smatr delete pane or window 
+  - { key: T,        mods: Command,       chars: "\x01c"    }  # new tab
+  - { key: RBracket, mods: Command|Shift, chars: "\x01\x6e" }  # Move one tab right.
+  - { key: LBracket, mods: Command|Shift, chars: "\x01\x70" }  # Move one tab left.
+  - { key: Right,    mods: Command|Shift, chars: "\x01\x6e" }  # Swap tab right.
+  - { key: Left,     mods: Command|Shift, chars: "\x01\x70" }  # Swap one tab left.
+  - { key: Key1,     mods: Command,       chars: "\x01\x31" }
+  - { key: Key2,     mods: Command,       chars: "\x01\x32" }
+  - { key: Key3,     mods: Command,       chars: "\x01\x33" }
+  - { key: Key4,     mods: Command,       chars: "\x01\x34" }
+  - { key: Key5,     mods: Command,       chars: "\x01\x35" }
+  - { key: Key6,     mods: Command,       chars: "\x01\x36" }
+  - { key: Key7,     mods: Command,       chars: "\x01\x37" }
+  - { key: Key8,     mods: Command,       chars: "\x01\x38" }
+  - { key: Key9,     mods: Command,       chars: "\x01\x39" } 

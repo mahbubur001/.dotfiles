@@ -1,51 +1,66 @@
-# Font configuration (changes require restart)
-shell:
-  # program: /usr/local/bin/zsh
-  # args:
-  #   - -l
-  #   - -c
-  #   - "tmux attach || tmux"
+import:
+  - ~/.config/alacritty/color.yml
 
-font:
-  size: 15
-  normal:
-    family: JetBrainsMono Nerd Font
-    style: Regular
-  offset:
-    y: 1
-    x: 1
-  use_thin_strokes: true
-  draw_bold_text_with_bright_colors: true
-
-window:
-  dynamic_padding: false
-  decorations: buttonless
-
-scrolling:
-  history: 2000
-  multiplier: 3
+# cSpell:words alacritty lfcd
+live_config_reload: true
 
 env:
   TERM: xterm-256color
 
-live_config_reload: true
+shell:
+  program: /usr/local/bin/fish
+
+selection:
+  semantic_escape_chars: ",│`|:\"' ()[]{}<>\t"
+  save_to_clipboard: true
+
+window:
+  opacity: 0.85
+  dynamic_padding: false
+  decorations: buttonless
+  dynamic_title: true
+
+font:
+  normal:
+    #family: 'SFMono Nerd Font'
+    family: 'Liga SFMono Nerd Font'
+    style: Regular
+  size: 12.5
+  offset:
+    y: 4
+    x: 1
+  use_thin_strokes: true
+  draw_bold_text_with_bright_colors: true
+
+mouse:
+  hide_when_typing: true
 
 key_bindings:
-  - { key: K, mods: Command, command: { program: "/usr/bin/clear" } }
-  - { key: Return, mods: Command|Shift, action: SpawnNewInstance }
-    # shortcuts for tmux. the leader key is control-a (0x01) or control-b (0x02)
-  - { key: W,        mods: Command,       chars: "\x01d"    }  # Smatr delete pane or window 
-  - { key: T,        mods: Command,       chars: "\x01c"    }  # new tab
-  - { key: RBracket, mods: Command|Shift, chars: "\x01\x6e" }  # Move one tab right.
-  - { key: LBracket, mods: Command|Shift, chars: "\x01\x70" }  # Move one tab left.
-  - { key: Right,    mods: Command|Shift, chars: "\x01\x6e" }  # Swap tab right.
-  - { key: Left,     mods: Command|Shift, chars: "\x01\x70" }  # Swap one tab left.
-  - { key: Key1,     mods: Command,       chars: "\x01\x31" }
-  - { key: Key2,     mods: Command,       chars: "\x01\x32" }
-  - { key: Key3,     mods: Command,       chars: "\x01\x33" }
-  - { key: Key4,     mods: Command,       chars: "\x01\x34" }
-  - { key: Key5,     mods: Command,       chars: "\x01\x35" }
-  - { key: Key6,     mods: Command,       chars: "\x01\x36" }
-  - { key: Key7,     mods: Command,       chars: "\x01\x37" }
-  - { key: Key8,     mods: Command,       chars: "\x01\x38" }
-  - { key: Key9,     mods: Command,       chars: "\x01\x39" } 
+  - { key: Comma, mods: Command, chars: "\x02," }
+  - { key: D, mods: Command, chars: "\x02K" }
+  - { key: F, mods: Command, chars: "lfcd\n" }
+  - { key: P, mods: Command, chars: ":lua require'telescope.builtin'.git_files{}\n" }
+  - { key: G, mods: Command, chars: "\x02g" }
+  - { key: K, mods: Command, chars: "\x02s" }
+  - { key: Key1, mods: Command, chars: "\x021" }
+  - { key: Key2, mods: Command, chars: "\x022" }
+  - { key: Key3, mods: Command, chars: "\x023" }
+  - { key: Key4, mods: Command, chars: "\x024" }
+  - { key: Key5, mods: Command, chars: "\x025" }
+  - { key: Key6, mods: Command, chars: "\x026" }
+  - { key: Key7, mods: Command, chars: "\x027" }
+  - { key: Key8, mods: Command, chars: "\x028" }
+  - { key: Key9, mods: Command, chars: "\x029" }
+  - { key: L, mods: Command, chars: "\x02L" }
+  - { key: LBracket, mods: Command, chars: "\x02[" }
+  - { key: LBracket, mods: Command|Shift, chars: "\x02p" }
+  - { key: E, mods: Command|Shift, chars: "\x02%" }
+  - { key: E, mods: Command, chars: "\x02\"" }
+  - { key: Q, mods: Command, chars: "\x02d" }
+  - { key: RBracket, mods: Command|Shift, chars: "\x02n" }
+  - { key: S, mods: Command, chars: "\e:w\n" }
+  - { key: Semicolon, mods: Command, chars: "\x02:" }
+  - { key: T, mods: Command, chars: "\x02c" }
+  - { key: J, mods: Command, chars: "\x02\x54" }
+  - { key: W, mods: Command, chars: "\x02x" }
+  - { key: Z, mods: Command, chars: "\x02z" }
