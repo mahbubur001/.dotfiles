@@ -1,4 +1,7 @@
 nvim/.config/nvim/plugin/
+nvim/.config/nvim/.github/
+nvim/.config/nvim/examples/
+nvim/.config/nvim/LICENSE
 tmux/.config/tmux/plugins/
 .gitignore
 nvim/.config/nvim/sessions/
