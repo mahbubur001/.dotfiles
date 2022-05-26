@@ -1,7 +1,6 @@
 #!/usr/bin/env fish
 
 set fish_greeting # disable fish greeting
-# starship init fish --print-full-init
 starship init fish | source
 zoxide init fish | source
 
@@ -35,7 +34,6 @@ set fish_color_terminators white
 set fish_color_valid_path normal
 
 # aliases
-#alias aw="~/.config/aw/bin/run"
 alias ls="exa -a --long --icons"
 alias a='code .'
 alias c='code .'

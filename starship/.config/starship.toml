@@ -1,3 +1,5 @@
+add_newline = false
+
 [battery]
 full_symbol = "🔋"
 charging_symbol = "🔌"
@@ -20,7 +22,7 @@ format = "[$path]($style)[$lock_symbol]($lock_style) "
 
 [git_branch]
 format = " [$symbol](green) [$branch]($style) "
-symbol = ""
+symbol = " "
 style = "bold yellow"
 
 [git_commit]
@@ -34,13 +36,13 @@ format = '[\($state( $progress_current of $progress_total)\)]($style) '
 conflicted = "⚔️ "
 ahead = "⇡ $count "
 behind = "⇣ $count "
-diverged = "⇡ ${ahead_count} ⇣ ${behind_count} "
-untracked = "🤷$coun"
+diverged = "⇡ $ahead_count ⇣ $behind_count "
+untracked = "🤷 $count"
 stashed = "📦 $count "
-modified = "פֿ ${count} "
-staged = "[ $count](green) "
+modified = "פֿ $count "
+staged = "[+ $count](green) "
 renamed = " $count "
-deleted = "🗑️ ${count}"
+deleted = "🗑  $count"
 style = "bright-white"
 format = "$all_status$ahead_behind"
 
