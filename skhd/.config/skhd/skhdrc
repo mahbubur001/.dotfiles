@@ -32,11 +32,12 @@ shift + alt - l : yabai -m window --swap east
 # move managed window
 shift + alt + ctrl - h : yabai -m window --warp west
 shift + alt + ctrl - j : yabai -m window --warp south
+# This shortcut key is commented because it conflicts with IDEA shift + cmd + K push code
 shift + alt + ctrl - k : yabai -m window --warp north
 shift + alt + ctrl - l : yabai -m window --warp east
 
 # rotate tree
-alt - r : yabai -m space --rotate 90
+# alt - r : yabai -m space --rotate 90
 
 # toggle window fullscreen zoom
 alt - d : yabai -m window --toggle zoom-fullscreen
@@ -62,6 +63,41 @@ shift + alt - 7 : yabai -m window --space 7; yabai -m space --focus 7
 shift + alt - 8 : yabai -m window --space 8; yabai -m space --focus 8
 shift + alt - 9 : yabai -m window --space 9; yabai -m space --focus 9
 
+
+# Divide the floating window left and right into the whole screen rows: cols: start-x: star-y: width: height M rows: n columns: x:y:w:h
+# Maximize
+ctrl + alt - return : yabai -m window --grid 1:1:0:0:1:1
+# 2 split screen
+ctrl + alt - up     : yabai -m window --grid 2:1:0:0:2:1
+# 2 split screen left
+ctrl + alt - left   : yabai -m window --grid 1:2:0:0:1:1
+# 2 split screen right
+ctrl + alt - right  : yabai -m window --grid 1:2:1:1:1:1
+# 2 split screen
+ctrl + alt - down   : yabai -m window --grid 2:1:0:1:2:1
+# 4 split screen top left
+ctrl + alt - u : yabai -m window --grid 2:2:0:0:1:1
+# 4 split screen top right
+ctrl + alt - i : yabai -m window --grid 2:2:0:1:1:1
+# 4 split screen lower left
+ctrl + alt - j : yabai -m window --grid 2:2:1:0:1:1
+# 4 split screen lower right
+ctrl + alt - k : yabai -m window --grid 2:2:1:1:1:1
+# 3 split screen left 1
+ctrl + alt - d : yabai -m window --grid 1:3:0:0:1:1
+# 3 split screen left 2
+ctrl + alt - e : yabai -m window --grid 1:3:0:0:2:1
+# 3 split screen 1
+ctrl + alt - f : yabai -m window --grid 1:3:1:0:1:1
+# 3 split screen right 2
+ctrl + alt - t : yabai -m window --grid 1:3:1:0:2:1
+# 3 split screen right 1
+ctrl + alt - g : yabai -m window --grid 1:3:3:0:1:1
+# 9 split screen centered
+ctrl + alt - c : yabai -m window --grid 3:3:1:1:1:1
+
+
+
 # create desktop, move window and follow focus - uses jq for parsing json (brew install jq)
 shift + alt - n : yabai -m space --create && \
                    index="$(yabai -m query --spaces --display | jq 'map(select(."native-fullscreen" == 0))[-1].index')" && \
@@ -72,22 +108,17 @@ shift + alt - n : yabai -m space --create && \
 alt - 0 : yabai -m space --focus recent
 
 # send window to monitor and follow focus
-shift + alt - n : yabai -m window --display next; yabai -m display --focus next
-shift + alt - p : yabai -m window --display previous; yabai -m display --focus previous
-
-# increase window size
-shift + alt - w : yabai -m window --resize top:0:-20
-shift + alt - d : yabai -m window --resize left:-20:0
-
-# decrease window size
-shift + alt - s : yabai -m window --resize bottom:0:-20
-shift + alt - a : yabai -m window --resize top:0:20
-
-# change layout of desktop
-ctrl + alt - a : yabai -m space --layout bsp
-ctrl + alt - d : yabai -m space --layout float
+# shift + alt - n : yabai -m window --display next; yabai -m display --focus next
+# shift + alt - p : yabai -m window --display previous; yabai -m display --focus previous
 
 
+# resize window
+ctrl + alt + cmd - left : yabai -m window --resize left:-50:0; yabai -m window --resize right:-50:0
+ctrl + alt + cmd - down : yabai -m window --resize bottom:0:50; yabai -m window --resize top:0:50
+ctrl + alt + cmd - up : yabai -m window --resize top:0:-50; yabai -m window --resize bottom:0:-50
+ctrl + alt + cmd - right : yabai -m window --resize right:50:0; yabai -m window --resize left:50:0
 
-# Re start yabai
+
+# Restart Yabai
 ctrl + alt + cmd - r : launchctl kickstart -k "gui/${UID}/homebrew.mxcl.yabai"
+

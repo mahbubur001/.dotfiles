@@ -1,25 +1,10 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
+#https://programmer.ink/think/tile-desktop-under-mac-yabai.html
 set -x
 
 # ====== Variables =============================
 
-declare -A gaps
-declare -A color
-
-gaps["top"]="4"
-gaps["bottom"]="24"
-gaps["left"]="4"
-gaps["right"]="4"
-gaps["inner"]="4"
-
-color["focused"]="0xE0808080"
-color["normal"]="0x00010101"
-color["preselect"]="0xE02d74da"
-
-# Uncomment to refresh ubersicht widget on workspace change
-# Make sure to replace WIDGET NAME for the name of the ubersicht widget
-#ubersicht_spaces_refresh_command="osascript -e 'tell application id \"tracesOf.Uebersicht\" to refresh widget id \"WIDGET NAME\"'"
 
 # ===== Loading Scripting Additions ============
 
@@ -29,14 +14,8 @@ yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
 
 # ===== Tiling setting =========================
 
-yabai -m config mouse_follows_focus         off
-yabai -m config focus_follows_mouse         off
 yabai -m config window_origin_display       default
 yabai -m config window_placement            second_child
-
-yabai -m config window_topmost              off
-yabai -m config window_opacity              off
-yabai -m config window_shadow               float
 
 yabai -m config window_border               of
 yabai -m config window_border_width         1
@@ -44,25 +23,46 @@ yabai -m config active_window_border_color  0xff775759
 yabai -m config normal_window_border_color  0xff555555
 yabai -m config insert_feedback_color       0xffd75f5f
 
-yabai -m config window_opacity              on
-yabai -m config window_opacity_duration     0.0
-yabai -m config active_window_opacity       1.0
-yabai -m config normal_window_opacity       0.60
-yabai -m config split_ratio                 0.50
-
+# Auto balance all windows always occupy the same space
 yabai -m config auto_balance                off
-yabai -m config mouse_modifier              fn
+# If auto balancing is disabled, this property defines the amount of space occupied by the new window. 0.5 means that the old window occupies 50%
+yabai -m config split_ratio                 0.50
+# The mouse modifier button means that you can use the mouse to modify the window size alone by pressing this button
+yabai -m config mouse_modifier               fn
+# fn + left key movement
 yabai -m config mouse_action1               move
+# fn + right click
 yabai -m config mouse_action2               resize
 yabai -m config mouse_drop_action           swap
+# Focus follow mouse default off: turn off autoraise: Auto Lift autofocus: Auto Focus
+#yabai -m config focus_follows_mouse          autofocus
+# Sets whether the mouse follows the current active window. The default is off: off: on: on
+# yabai -m config mouse_follows_focus          off
+
+# Floating window problem at the top
+yabai -m config window_topmost               on
+# Modify window shadow on: open off: close float: only show the shadow of floating window
+yabai -m config window_shadow                float
+
+# Window transparency settings
+yabai -m config window_opacity               on
+# Configure the opacity of the active window
+yabai -m config active_window_opacity        1.0             
+yabai -m config normal_window_opacity        0.9
+yabai -m config window_opacity_duration      0.0
 
 # general space settings
 yabai -m config layout                      bsp
-yabai -m config top_padding                 4
-yabai -m config bottom_padding              4
-yabai -m config left_padding                4
-yabai -m config right_padding               4
+yabai -m config top_padding                 5
+yabai -m config bottom_padding              5
+yabai -m config left_padding                5
+yabai -m config right_padding               5
 yabai -m config window_gap                  4
+
+# Add 20 padding at the top and 0 padding at the bottom of each space on the main display
+# yabai -m config external_bar main:20:0
+# Add a 0 fill at the top and a 0 fill at the bottom of each space on all displays
+yabai -m config external_bar all:0:5
 
 # ===== Rules ==================================
 
