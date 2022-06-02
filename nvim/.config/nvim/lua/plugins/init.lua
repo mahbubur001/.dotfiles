@@ -72,7 +72,7 @@ local plugins = {
          require("plugins.configs.others").gitsigns()
       end,
       setup = function()
-         nvchad.packer_lazy_load "gitsigns.nvim"
+         require("core.utils").packer_lazy_load "gitsigns.nvim"
       end,
    },
 
@@ -81,7 +81,7 @@ local plugins = {
    ["williamboman/nvim-lsp-installer"] = {
       opt = true,
       setup = function()
-         nvchad.packer_lazy_load "nvim-lsp-installer"
+         require("core.utils").packer_lazy_load "nvim-lsp-installer"
          -- reload the current file so lsp actually starts for it
          vim.defer_fn(function()
             vim.cmd 'if &ft == "packer" | echo "" | else | silent! e %'
@@ -102,13 +102,6 @@ local plugins = {
       after = "nvim-lspconfig",
       config = function()
          require("plugins.configs.others").signature()
-      end,
-   },
-
-   ["andymass/vim-matchup"] = {
-      opt = true,
-      setup = function()
-         nvchad.packer_lazy_load "vim-matchup"
       end,
    },
 
@@ -186,7 +179,7 @@ local plugins = {
 
    -- file managing , picker etc
    ["kyazdani42/nvim-tree.lua"] = {
-      ft = 'alpha',
+      ft = "alpha",
       cmd = { "NvimTreeToggle", "NvimTreeFocus" },
       config = function()
          require "plugins.configs.nvimtree"
@@ -203,7 +196,7 @@ local plugins = {
    ["folke/which-key.nvim"] = {
       opt = true,
       setup = function()
-         nvchad.packer_lazy_load "which-key.nvim"
+         require("core.utils").packer_lazy_load "which-key.nvim"
       end,
       config = function()
          require "plugins.configs.whichkey"

@@ -71,7 +71,7 @@ M.bufferline = {
       -- close buffer + hide terminal buffer
       ["<leader>x"] = {
          function()
-            nvchad.close_buffer()
+            require("core.utils").close_buffer()
          end,
          "   close buffer",
       },
@@ -147,7 +147,7 @@ M.lspconfig = {
 
       ["<leader>ra"] = {
          function()
-            vim.lsp.buf.rename()
+            vim.lsp.buf.rename.float()
          end,
          "   lsp rename",
       },
