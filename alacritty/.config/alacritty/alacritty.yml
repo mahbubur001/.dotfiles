@@ -1,66 +1,72 @@
 import:
-  - ~/.config/alacritty/color.yml
+    - ~/.config/alacritty/color.yml
 
 # cSpell:words alacritty lfcd
 live_config_reload: true
 
 env:
-  TERM: xterm-256color
-
-shell:
-  program: /usr/local/bin/fish
+    TERM: xterm-256color
 
 selection:
-  semantic_escape_chars: ",│`|:\"' ()[]{}<>\t"
-  save_to_clipboard: true
+    semantic_escape_chars: ",│`|:\"' ()[]{}<>\t"
+    save_to_clipboard: true
 
 window:
-  opacity: 0.85
-  dynamic_padding: false
-  decorations: buttonless
-  dynamic_title: true
+    opacity: 0.85
+    dynamic_padding: false
+    decorations: buttonless
+    dynamic_title: true
 
 font:
-  normal:
-    family: 'Liga SFMono Nerd Font'
-    style: Regular
-  size: 12.5
-  offset:
-    y: 4
-    x: 1
-  use_thin_strokes: true
-  draw_bold_text_with_bright_colors: true
+    normal:
+        family: 'Liga SFMono Nerd Font'
+        style: Regular
+    size: 12.5
+    offset:
+        y: 4
+        x: 1
+    use_thin_strokes: true
+    draw_bold_text_with_bright_colors: true
 
 mouse:
-  hide_when_typing: true
+    hide_when_typing: true
 
 key_bindings:
-  - { key: Comma, mods: Command, chars: "\x01," }
-  # - { key: D, mods: Command, chars: "\x01K" }
-  - { key: F, mods: Command, chars: "lfcd\n" }
-  - { key: P, mods: Command, chars: ":lua require'telescope.builtin'.git_files{}\n" }
-  - { key: G, mods: Command, chars: "\x01g" }
-  - { key: K, mods: Command, chars: "\x01s" }
-  - { key: Key1, mods: Command, chars: "\x011" }
-  - { key: Key2, mods: Command, chars: "\x012" }
-  - { key: Key3, mods: Command, chars: "\x013" }
-  - { key: Key4, mods: Command, chars: "\x014" }
-  - { key: Key5, mods: Command, chars: "\x015" }
-  - { key: Key6, mods: Command, chars: "\x016" }
-  - { key: Key7, mods: Command, chars: "\x017" }
-  - { key: Key8, mods: Command, chars: "\x018" }
-  - { key: Key9, mods: Command, chars: "\x019" }
-  - { key: L, mods: Command, chars: "\x01L" }
-  - { key: LBracket, mods: Command, chars: "\x01[" }
-  - { key: LBracket, mods: Command|Shift, chars: "\x01p" }
-  - { key: E, mods: Command|Shift, chars: "\x01%" }
-  - { key: E, mods: Command, chars: "\x01\"" }
-  - { key: Q, mods: Command, chars: "\x01d" }
-  - { key: RBracket, mods: Command|Shift, chars: "\x01n" }
-  - { key: S, mods: Command, chars: "\e:w\n" }
-  - { key: Semicolon, mods: Command, chars: "\x01:" }
-  - { key: T, mods: Command, chars: "\x01c" }
-  - { key: J, mods: Command, chars: "\x01\x54" }
-  - { key: W, mods: Command, chars: "\x01d" }
-  - { key: Z, mods: Command, chars: "\x01z" }
-  - { key: N,        mods: Command, command: { program: "open", args: ["-n", "/Applications/Alacritty.app"] } }
+    - { key: Comma, mods: Command, chars: "\x01," }
+    # - { key: D, mods: Command, chars: "\x01K" }
+    - { key: F, mods: Command, chars: "lfcd\n" }
+    - {
+          key: P,
+          mods: Command,
+          chars: ":lua require'telescope.builtin'.git_files{}\n",
+      }
+    - { key: G, mods: Command, chars: "\x01g" }
+    - { key: K, mods: Command, chars: "\x01s" }
+    - { key: Key1, mods: Command, chars: "\x011" }
+    - { key: Key2, mods: Command, chars: "\x012" }
+    - { key: Key3, mods: Command, chars: "\x013" }
+    - { key: Key4, mods: Command, chars: "\x014" }
+    - { key: Key5, mods: Command, chars: "\x015" }
+    - { key: Key6, mods: Command, chars: "\x016" }
+    - { key: Key7, mods: Command, chars: "\x017" }
+    - { key: Key8, mods: Command, chars: "\x018" }
+    - { key: Key9, mods: Command, chars: "\x019" }
+    - { key: L, mods: Command, chars: "\x01L" }
+    - { key: LBracket, mods: Command, chars: "\x01[" }
+    - { key: LBracket, mods: Command|Shift, chars: "\x01p" }
+    - { key: E, mods: Command|Shift, chars: "\x01%" }
+    - { key: E, mods: Command, chars: "\x01\"" }
+    - { key: Q, mods: Command, chars: "\x01d" }
+    - { key: RBracket, mods: Command|Shift, chars: "\x01n" }
+    - { key: S, mods: Command, chars: "\e:w\n" }
+    - { key: Semicolon, mods: Command, chars: "\x01:" }
+    - { key: T, mods: Command, chars: "\x01c" }
+    - { key: J, mods: Command, chars: "\x01\x54" }
+    - { key: W, mods: Command, chars: "\x01d" }
+    - { key: Z, mods: Command, chars: "\x01z" }
+    - {
+          key: N,
+          mods: Command,
+          command:
+              { program: 'open', args: ['-n', '/Applications/Alacritty.app'] },
+      }
