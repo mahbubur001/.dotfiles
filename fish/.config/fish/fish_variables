@@ -7,7 +7,7 @@ SETUVAR --export FZF_DEFAULT_COMMAND:fd\x20\x2dH\x20\x2dE\x20\x27\x2egit\x27
 SETUVAR --export FZF_DEFAULT_OPTS:\x2d\x2dcolor\x3dspinner\x3a\x23F8BD96\x2chl\x3a\x23F28FAD\x20\x2d\x2dcolor\x3dfg\x3a\x23D9E0EE\x2cheader\x3a\x23F28FAD\x2cinfo\x3a\x23DDB6F2\x2cpointer\x3a\x23F8BD96\x20\x2d\x2dcolor\x3dmarker\x3a\x23F8BD96\x2cfg\x2b\x3a\x23F2CDCD\x2cprompt\x3a\x23DDB6F2\x2chl\x2b\x3a\x23F28FAD
 SETUVAR --export FZF_TMUX_OPTS:\x2dp
 SETUVAR --export --path GOPATH:/Users/mahbubur/go
-SETUVAR --export PAGER:/Users/radiustheme/\x2elocal/bin/nvimpager
+SETUVAR --export PAGER:/Users/mahbubur/\x2elocal/bin/nvimpager
 SETUVAR __fish_initialized:3400
 SETUVAR _fish_abbr__3A_43_ommands:nvim\x20\x2bCommands
 SETUVAR _fish_abbr__3A_GitFiles:nvim\x20\x2bGitFiles

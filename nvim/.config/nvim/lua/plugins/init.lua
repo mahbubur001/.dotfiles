@@ -17,6 +17,7 @@ local plugins = {
    },
 
    ["NvChad/nvterm"] = {
+      module = "nvterm",
       config = function()
          require "plugins.configs.nvterm"
       end,
@@ -29,14 +30,15 @@ local plugins = {
       end,
    },
 
-   ["feline-nvim/feline.nvim"] = {
-      after = "nvim-web-devicons",
+   ["SmiteshP/nvim-gps"] = {
+      event = "CursorMoved",
       config = function()
-         require "plugins.configs.statusline"
+         require "plugins.configs.gps"
       end,
    },
 
    ["akinsho/bufferline.nvim"] = {
+      tag = "v2.*",
       after = "nvim-web-devicons",
       config = function()
          require "plugins.configs.bufferline"

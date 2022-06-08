@@ -83,6 +83,7 @@ for _, plugin in pairs(default_plugins) do
    g["loaded_" .. plugin] = 1
 end
 
+-- set shada path
 vim.schedule(function()
    vim.opt.shadafile = vim.fn.expand "$HOME" .. "/.local/share/nvim/shada/main.shada"
    vim.cmd [[ silent! rsh ]]

@@ -14,7 +14,8 @@ alt - f : open /System/Library/CoreServices/Finder.app
 alt - m : open /Applications/Spotify.app
 
 
-
+# Restart Yabai
+alt - r : launchctl kickstart -k "gui/${UID}/homebrew.mxcl.yabai"
 # Yabai
 
 # focus window
@@ -104,10 +105,10 @@ shift + alt - a : yabai -m space --layout bsp
 
 
 # create desktop, move window and follow focus - uses jq for parsing json (brew install jq)
-shift + alt - n : yabai -m space --create && \
-                   index="$(yabai -m query --spaces --display | jq 'map(select(."native-fullscreen" == 0))[-1].index')" && \
-                   yabai -m window --space "${index}" && \
-                   yabai -m space --focus "${index}"
+# shift + alt - n : yabai -m space --create && \
+#                    index="$(yabai -m query --spaces --display | jq 'map(select(."native-fullscreen" == 0))[-1].index')" && \
+#                    yabai -m window --space "${index}" && \
+#                    yabai -m space --focus "${index}"
 
 # fast focus desktop
 alt - 0 : yabai -m space --focus recent
