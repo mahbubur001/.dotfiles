@@ -1,14 +1,5 @@
 add_newline = false
 
-[battery]
-full_symbol = "🔋"
-charging_symbol = "🔌"
-discharging_symbol = "⚡"
-
-[[battery.display]]
-threshold = 30
-style = "bold red"
-
 [character]
 error_symbol = "[✖](bold red) "
 

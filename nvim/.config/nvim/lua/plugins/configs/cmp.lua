@@ -4,6 +4,8 @@ if not present then
    return
 end
 
+require("base46").load_highlight "cmp"
+
 vim.opt.completeopt = "menuone,noselect"
 
 local function border(hl_name)
@@ -32,6 +34,7 @@ local options = {
    window = {
       completion = {
          border = border "CmpBorder",
+         winhighlight = "Normal:CmpPmenu,CursorLine:PmenuSel,Search:None",
       },
       documentation = {
          border = border "CmpDocBorder",
@@ -44,9 +47,8 @@ local options = {
    },
    formatting = {
       format = function(_, vim_item)
-         local icons = require "plugins.configs.lspkind_icons"
+         local icons = require("ui.icons").lspkind
          vim_item.kind = string.format("%s %s", icons[vim_item.kind], vim_item.kind)
-
          return vim_item
       end,
    },

@@ -35,13 +35,12 @@ key_bindings:
   - { key: Comma, mods: Command, chars: "\x01," }
   # - { key: D, mods: Command, chars: "\x01K" }
   - { key: F, mods: Command, chars: "lfcd\n" }
-  - {
-    key: P,
-    mods: Command,
-    chars: ":lua require'telescope.builtin'.git_files{}\n",
-  }
+  - {key: P,mods: Command,chars: ":lua require'telescope.builtin'.git_files{}\n"}
   - { key: G, mods: Command, chars: "\x01g" }
   - { key: K, mods: Command, chars: "\x01s" }
+  - { key: Key0,  mods: Command, action: ResetFontSize }
+  - { key: Plus,  mods: Command, action: IncreaseFontSize}
+  - { key: Minus, mods: Command, action: DecreaseFontSize}
   - { key: Key1, mods: Command, chars: "\x011" }
   - { key: Key2, mods: Command, chars: "\x012" }
   - { key: Key3, mods: Command, chars: "\x013" }
@@ -60,7 +59,7 @@ key_bindings:
   - { key: RBracket, mods: Command|Shift, chars: "\x01n" }
   - { key: S, mods: Command, chars: "\e:w\n" }
   - { key: Semicolon, mods: Command, chars: "\x01:" }
-  #    - { key: T, mods: Command, chars: "\x01c" }
+  - { key: Slash, mods: Command, chars: "\x00/" }
   - { key: J, mods: Command, chars: "\x01\x54" }
   - { key: W, mods: Command, chars: "\x01d" }
   - { key: Z, mods: Command, chars: "\x01z" }

@@ -28,9 +28,13 @@ local sep_r = sep_style[user_sep_style]["right"]
 
 local modes = {
    ["n"] = { "NORMAL", "St_NormalMode" },
+   ["niI"] = { "NORMAL i", "St_NormalMode" },
+   ["niR"] = { "NORMAL r", "St_NormalMode" },
+   ["niV"] = { "NORMAL v", "St_NormalMode" },
    ["no"] = { "N-PENDING", "St_NormalMode" },
    ["i"] = { "INSERT", "St_InsertMode" },
    ["ic"] = { "INSERT", "St_InsertMode" },
+   ["ix"] = { "INSERT completion", "St_InsertMode" },
    ["t"] = { "TERMINAL", "St_TerminalMode" },
    ["nt"] = { "NTERMINAL", "St_NTerminalMode" },
    ["v"] = { "VISUAL", "St_VisualMode" },
@@ -60,36 +64,34 @@ M.mode = function()
    return current_mode .. mode_sep1 .. "%#ST_EmptySpace#" .. sep_r
 end
 
-M.fileInfo = function()
-   local icon = ""
+M.fileicon = function()
+   local icon = "  "
+
    local filename = fn.fnamemodify(fn.expand "%:t", ":r")
    local extension = fn.expand "%:e"
 
+   if filename ~= "" then
+      local devicons_present, devicons = pcall(require, "nvim-web-devicons")
+
+      if devicons_present then
+         local ft_icon = devicons.get_icon(filename, extension)
+         icon = (ft_icon ~= nil and " " .. ft_icon) or ""
+      end
+   end
+
+   return "%#St_file_info#" .. icon
+end
+
+M.filename = function()
+   local filename = fn.fnamemodify(fn.expand "%:t", ":r")
+
    if filename == "" then
-      icon = icon .. "  Empty "
+      filename = "Empty "
    else
       filename = " " .. filename .. " "
    end
 
-   local devicons_present, devicons = pcall(require, "nvim-web-devicons")
-
-   if not devicons_present then
-      return " "
-   end
-
-   local ft_icon = devicons.get_icon(filename, extension)
-   icon = (ft_icon ~= nil and " " .. ft_icon) or icon
-
-   return "%#St_file_info#" .. icon .. filename .. "%#St_file_sep#" .. sep_r
-end
-
-M.gps = function()
-   if vim.o.columns < 140 or not package.loaded["nvim-gps"] then
-      return ""
-   end
-
-   local gps = require "nvim-gps"
-   return (gps.is_available() and gps.get_location()) or ""
+   return "%#St_file_info#" .. filename .. "%#St_file_sep#" .. sep_r
 end
 
 M.git = function()
@@ -146,20 +148,32 @@ M.LSP_Diagnostics = function()
 end
 
 M.LSP_status = function()
-   local lsp_attached = next(vim.lsp.buf_get_clients()) ~= nil
-   local content = lsp_attached and "   LSP ~ " .. vim.lsp.get_active_clients()[1].name .. " " or false
+   local clients = vim.lsp.get_active_clients()
+   local names = {}
+   for _, client in ipairs(clients) do
+      if client.attached_buffers[vim.api.nvim_get_current_buf()] then
+         table.insert(names, client.name)
+      end
+   end
+  
+   local name = false
+   if next(names) then
+      name = table.concat(names, '|')
+   end
+   
+   local content = name and "   LSP ~ " .. name .. " " or false
    return content and ("%#St_LspStatus#" .. content) or ""
 end
 
 M.cwd = function()
-   local left_sep = "%#ST_EmptySpace2#" .. sep_l .. "%#St_cwd_sep#" .. sep_l
-   local dir_icon = "%#St_cwd_icon#" .. " "
+   local left_sep = "%#St_cwd_sep#" .. sep_l
+   local dir_icon = "%#St_cwd_icon#" .. " "
    local dir_name = "%#St_cwd_text#" .. " " .. fn.fnamemodify(fn.getcwd(), ":t") .. " "
    return (vim.o.columns > 120 and left_sep .. dir_icon .. dir_name) or ""
 end
 
 M.cursor_position = function()
-   local left_sep = "%#ST_EmptySpace#" .. sep_l .. "%#St_pos_sep#" .. sep_l
+   local left_sep = "%#St_pos_sep#" .. sep_l
    local icon = "%#St_pos_icon#" .. " "
 
    local current_line = fn.line "."
@@ -178,12 +192,12 @@ end
 M.run = function()
    return table.concat {
       M.mode(),
-      M.fileInfo(),
+      M.fileicon(),
+      M.filename(),
       M.git(),
 
       "%=",
       M.LSP_progress(),
-      M.gps(),
       "%=",
 
       M.LSP_Diagnostics(),
