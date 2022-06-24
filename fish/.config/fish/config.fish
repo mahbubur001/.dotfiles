@@ -15,7 +15,12 @@ set -x LANG en_US.UTF-8
 set -x LC_ALL en_US.UTF-8
 
 # os specific homebrew setup
-eval (/usr/local/bin/brew shellenv)
+if test -f /usr/local/bin/brew
+  eval (/usr/local/bin/brew shellenv)
+else
+  eval (/opt/homebrew/bin/brew shellenv)
+end
+
 fish_add_path /opt/homebrew/bin
 
 # user path
