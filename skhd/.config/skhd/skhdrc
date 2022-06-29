@@ -1,10 +1,10 @@
 #! /usr/bin/bash
-
+ctrl + alt + cmd - r : launchctl kickstart -k "gui/${UID}/homebrew.mxcl.yabai"
 # opens Applecation
 # alt - a : open /Applications/iTerm.app
 # open terminal, blazingly fast compared to iTerm/Hyper
-# cmd - return : open /Applications/kitty.app
-cmd - return : open /Applications/Alacritty.app
+cmd - return : open /Applications/kitty.app
+# cmd - return : open /Applications/Alacritty.app
 alt - a : open /Applications/Asana.app
 alt - p : open /Applications/PhpStorm.app
 alt - b : open /Applications/Google\ Chrome.app

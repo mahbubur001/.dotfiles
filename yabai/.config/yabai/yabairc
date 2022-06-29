@@ -64,7 +64,7 @@ yabai -m config window_gap                  4
 yabai -m config external_bar all:0:5
 
 # Do not manage some apps which are not resizable
-yabai -m rule --add app="^(Local|Skype|Calculator|VLC|System Preferences|zoom.us|Photo Booth|Archive Utility|Python|LibreOffice)$" manage=off
+yabai -m rule --add app="^(Local|Skype|Calculator|VLC|System Preferences|zoom.us|Photo Booth|Archive Utility|Python|LibreOffice|WhatsApp)$" manage=off
 
 # ===== Rules ==================================
 yabai -m rule --add label="Finder" app="^Finder$" manage=off
