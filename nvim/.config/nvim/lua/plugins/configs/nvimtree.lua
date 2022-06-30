@@ -23,6 +23,7 @@ local options = {
       update_cwd = false,
    },
    view = {
+      adaptive_size = true,
       side = "left",
       width = 25,
       hide_root_folder = true,
@@ -31,6 +32,9 @@ local options = {
       enable = false,
       ignore = true,
    },
+   filesystem_watchers = {
+      enable = true,
+    },
    actions = {
       open_file = {
          resize_window = true,
