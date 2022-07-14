@@ -8,6 +8,14 @@ vim.cmd "silent! command! NvChadSnapshotCheckout lua require('nvchad').snap_chec
 local autocmd = vim.api.nvim_create_autocmd
 local api = vim.api
 
+-- dont list quickfix buffers
+autocmd("FileType", {
+   pattern = "qf",
+   callback = function()
+      vim.opt_local.buflisted = false
+   end,
+})
+
 -- wrap the PackerSync command to warn people before using it in NvChadSnapshots
 autocmd("VimEnter", {
    callback = function()
@@ -39,7 +47,7 @@ autocmd("BufEnter", {
 vim.t.bufs = vim.api.nvim_list_bufs()
 
 -- thx to https://github.com/ii14 & stores buffer per tab -> table
-autocmd("BufAdd", {
+autocmd({ "BufAdd", "BufEnter" }, {
    callback = function(args)
       if vim.t.bufs == nil then
          vim.t.bufs = { args.buf }
@@ -47,7 +55,7 @@ autocmd("BufAdd", {
          local bufs = vim.t.bufs
 
          -- check for duplicates
-         if not vim.tbl_contains(bufs, args.buf) then
+         if not vim.tbl_contains(bufs, args.buf) and (args.event == "BufAdd" or vim.bo[args.buf].buflisted) then
             table.insert(bufs, args.buf)
             vim.t.bufs = bufs
          end

@@ -64,22 +64,10 @@ yabai -m config window_gap                  4
 yabai -m config external_bar all:0:5
 
 # Do not manage some apps which are not resizable
-yabai -m rule --add app="^(Local|Skype|Calculator|VLC|System Preferences|zoom.us|Photo Booth|Archive Utility|Python|LibreOffice|WhatsApp)$" manage=off
+yabai -m rule --add app="^(JetBrains Toolbox|System Preferences|Finder|Software Update|Activity Monitor|Dictionary|Calculator|App Store|Alfred|TablePlus|Spotify|Music|Local|Skype|Calculator|VLC|System Preferences|zoom.us|Photo Booth|Archive Utility|Python|LibreOffice|WhatsApp|Keka|Postman)$" manage=off
 
 # ===== Rules ==================================
-yabai -m rule --add label="Finder" app="^Finder$" manage=off
-yabai -m rule --add label="TablePlus" app="^TablePlus" manage=off
-yabai -m rule --add label="Skype" app="^Skype" manage=off
-yabai -m rule --add label="Spotify" app="^Spotify" manage=off
-yabai -m rule --add label="Music" app="^Music" manage=off
-yabai -m rule --add label="Alfred" app="^Alfred$" manage=off
 yabai -m rule --add label="Safari" app="^Safari$" title="^(General|(Tab|Password|Website|Extension)s|AutoFill|Se(arch|curity)|Privacy|Advance)$" manage=off
-yabai -m rule --add label="System Preferences" app="^System Preferences$" manage=off
-yabai -m rule --add label="App Store" app="^App Store$" manage=off
-yabai -m rule --add label="Activity Monitor" app="^Activity Monitor$" manage=off
-yabai -m rule --add label="Calculator" app="^Calculator$" manage=off
-yabai -m rule --add label="Dictionary" app="^Dictionary$" manage=off
-yabai -m rule --add label="Software Update" title="Software Update" manage=off
 yabai -m rule --add label="About This Mac" app="System Information" title="About This Mac" manage=off
 
 # ===== Signals ================================
@@ -91,12 +79,5 @@ yabai -m signal --add event=window_created action="${ubersicht_spaces_refresh_co
 yabai -m signal --add event=window_destroyed action="${ubersicht_spaces_refresh_command}"
 yabai -m signal --add event=window_focused action="${ubersicht_spaces_refresh_command}"
 yabai -m signal --add event=window_title_changed action="${ubersicht_spaces_refresh_command}"
-
-
-yabai -m space 1 --label Code
-yabai -m space 2 --label Web
-yabai -m space 3 --label Manager
-yabai -m space 4 --label Music
-yabai -m space 5 --label misc
 
 echo "yabai configuration loaded.."

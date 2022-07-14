@@ -1,6 +1,13 @@
 import:
   - ~/.config/alacritty/color.yml
 
+shell:
+  program: fish
+  args:
+    - -l
+    - -c
+    - "tmux attach || tmux"
+
 # cSpell:words alacritty lfcd
 live_config_reload: true
 
