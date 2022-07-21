@@ -166,3 +166,8 @@ abbr ye "tmux rename-window e2e && yarn e2e"
 abbr yg "yarn generate"
 abbr yl "yarn lint"
 abbr yt "tmux rename-window test && yarn test"
+
+# bun
+set -Ux BUN_INSTALL "/Users/mahbubur/.bun"
+fish_add_path "/Users/mahbubur/.bun/bin"
+

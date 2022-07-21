@@ -2,7 +2,7 @@ import:
   - ~/.config/alacritty/color.yml
 
 shell:
-  program: fish
+  program: /usr/local/bin/fish
   args:
     - -l
     - -c
@@ -26,11 +26,11 @@ window:
 
 font:
   normal:
-    family: 'Liga SFMono Nerd Font'
-    style: Regular
-  size: 14.5
+    family: 'JetBrainsMono Nerd Font'
+    style: Thin
+  size: 15
   offset:
-    y: 3
+    y: 5
     x: 1
   use_thin_strokes: true
   draw_bold_text_with_bright_colors: true
