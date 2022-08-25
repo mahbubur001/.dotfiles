@@ -1,7 +1,9 @@
+vim.defer_fn(function()
+  pcall(require, "impatient")
+end, 0)
+
 require "core"
 require "core.options"
-
-require("core.utils").load_mappings()
 
 -- setup packer + plugins
 local fn = vim.fn
@@ -19,3 +21,5 @@ if fn.empty(fn.glob(install_path)) > 0 then
 end
 
 pcall(require, "custom")
+
+require("core.utils").load_mappings()
