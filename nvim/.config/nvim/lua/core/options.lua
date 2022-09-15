@@ -19,7 +19,7 @@ opt.showmode = false
 
 opt.title = true
 opt.clipboard = "unnamedplus"
-opt.cul = true -- cursor line
+opt.cursorline = true
 
 -- Indenting
 opt.expandtab = true
@@ -54,9 +54,6 @@ opt.updatetime = 250
 -- go to previous/next line with h,l,left arrow and right arrow
 -- when cursor reaches end/beginning of line
 opt.whichwrap:append "<>[]hl"
-
--- auto-wrap comments, don't auto insert comment on o/O and enter
-opt.formatoptions:remove "cro"
 
 g.mapleader = " "
 

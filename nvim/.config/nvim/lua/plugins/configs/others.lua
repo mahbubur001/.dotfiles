@@ -2,14 +2,6 @@ local M = {}
 
 local load_override = require("core.utils").load_override
 
-M.nvchad_ui = function()
-  local present, nvchad_ui = pcall(require, "nvchad_ui")
-
-  if present then
-    nvchad_ui.setup()
-  end
-end
-
 M.autopairs = function()
   local present1, autopairs = pcall(require, "nvim-autopairs")
   local present2, cmp = pcall(require, "cmp")
@@ -88,9 +80,11 @@ M.colorizer = function()
   }
 
   options = load_override(options, "NvChad/nvim-colorizer.lua")
-  colorizer.setup(options["filetypes"], options["user_default_options"])
-
-  vim.cmd "ColorizerAttachToBuffer"
+  colorizer.setup(options)
+  -- execute colorizer as soon as possible
+  vim.defer_fn(function()
+    require("colorizer").attach_to_buffer(0)
+  end, 0)
 end
 
 M.comment = function()
@@ -168,6 +162,24 @@ M.devicons = function()
 
     devicons.setup(options)
   end
+end
+
+M.packer_init = function()
+  return {
+    auto_clean = true,
+    compile_on_sync = true,
+    git = { clone_timeout = 6000 },
+    display = {
+      working_sym = "ﲊ",
+      error_sym = "✗ ",
+      done_sym = " ",
+      removed_sym = " ",
+      moved_sym = "",
+      open_fn = function()
+        return require("packer.util").float { border = "single" }
+      end,
+    },
+  }
 end
 
 return M
