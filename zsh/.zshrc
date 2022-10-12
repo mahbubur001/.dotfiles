@@ -1,3 +1,5 @@
+# Fig pre block. Keep at the top of this file.
+# [[ -f "$HOME/.fig/shell/zshrc.pre.zsh" ]] && . "$HOME/.fig/shell/zshrc.pre.zsh"
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -15,6 +17,8 @@ export PATH="$PATH:/opt/homebrew/bin/"
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 export PATH=$HOME/.composer/vendor/bin:$PATH
+# in ~/.zshrc, before Oh My Zsh is sourced:
+ZSH_DOTENV_FILE=.dotenv
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -82,7 +86,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-z zsh-syntax-highlighting zsh-autosuggestions zsh-completions zsh-history-substring-search)
+plugins=(git zsh-z zsh-syntax-highlighting zsh-autosuggestions zsh-completions zsh-history-substring-search dotenv)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -157,3 +161,6 @@ export PATH="/usr/local/opt/php@7.4/bin:$PATH"
 
 export PATH="/usr/local/sbin:$PATH"
 eval "$(starship init zsh)"
+
+# Fig post block. Keep at the bottom of this file.
+# [[ -f "$HOME/.fig/shell/zshrc.post.zsh" ]] && . "$HOME/.fig/shell/zshrc.post.zsh"
