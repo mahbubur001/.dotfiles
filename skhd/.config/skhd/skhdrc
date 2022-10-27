@@ -1,7 +1,8 @@
 #! /usr/bin/bash
 
 # opens Application
-cmd - return : open /Applications/iTerm.app
+cmd - return : open /Applications/Warp.app
+# cmd - return : open /Applications/iTerm.app
 alt - a : open /Applications/Asana.app
 alt - p : open /Applications/PhpStorm.app
 alt - b : open /Applications/Google\ Chrome.app
@@ -20,6 +21,35 @@ shift + alt - f : yabai -m config layout stack
 
 # Toggle split orientation of the selected windows node
 shift + lalt - s : yabai -m window --toggle split
+
+# alt-k
+alt + shift - k : yabai -m query --spaces --space \
+  | jq -re ".index" \
+  | xargs -I{} yabai -m query --windows --space {} \
+  | jq -sre 'add | map(select(."is-minimized"==false)) | . as $array | length as $array_length | index(map(select(."has-focus"==true))) as $has_index | if $has_index > 0 then nth($has_index - 1).id else nth($array_length - 1).id end'  \
+  | xargs -I{} yabai -m window --swap {}
+
+# alt-j
+alt + shift - j : yabai -m query --spaces --space \
+  | jq -re ".index" \
+  | xargs -I{} yabai -m query --windows --space {} \
+  | jq -sre 'add | map(select(."is-minimized"==false)) | . as $array | length as $array_length | index(map(select(."has-focus"==true))) as $has_index | if $array_length - 1 > $has_index then nth($has_index + 1).id else nth(0).id end' \
+  | xargs -I{} yabai -m window --swap {}
+
+# alt-k
+alt - k : yabai -m query --spaces --space \
+  | jq -re ".index" \
+  | xargs -I{} yabai -m query --windows --space {} \
+  | jq -sre 'add | map(select(."is-minimized"==false)) | . as $array | length as $array_length | index(map(select(."has-focus"==true))) as $has_index | if $has_index > 0 then nth($has_index - 1).id else nth($array_length - 1).id end'  \
+  | xargs -I{} yabai -m window --focus {}
+
+# alt-j
+alt - j : yabai -m query --spaces --space \
+  | jq -re ".index" \
+  | xargs -I{} yabai -m query --windows --space {} \
+  | jq -sre 'add | map(select(."is-minimized"==false)) | . as $array | length as $array_length | index(map(select(."has-focus"==true))) as $has_index | if $array_length - 1 > $has_index then nth($has_index + 1).id else nth(0).id end' \
+  | xargs -I{} yabai -m window --focus {}
+
 
 # send window to desktop and follow focus
 shift + alt - 1 : yabai -m window --space  1; yabai -m space --focus 1

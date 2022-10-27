@@ -65,7 +65,7 @@ yabai -m config external_bar all:0:5
 
 # Do not manage some apps which are not resizable
 yabai -m rule --add app="^(JetBrains Toolbox|System Preferences|Finder|Software Update|Activity Monitor|Dictionary|Calculator|App Store|Alfred|TablePlus|Spotify|Music|Local|Skype|Calculator|VLC|System Preferences|zoom.us|Photo Booth|Archive Utility|Python|LibreOffice|WhatsApp|Keka|Postman)$" manage=off
-yabai -m rule --add label="PhpStorm" app="PhpStorm" title="^(Development)" manage=off
+yabai -m rule --add label="PhpStorm" app="PhpStorm" title="^(Development|Preferences)" manage=off
 # ===== Rules ==================================
 yabai -m rule --add label="Safari" app="^Safari$" title="^(General|(Tab|Password|Website|Extension)s|AutoFill|Se(arch|curity)|Privacy|Advance)$" manage=off
 yabai -m rule --add label="About This Mac" app="System Information" title="About This Mac" manage=off
