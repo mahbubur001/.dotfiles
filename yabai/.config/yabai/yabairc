@@ -63,6 +63,9 @@ yabai -m config window_gap                  4
 # Add a 0 fill at the top and a 0 fill at the bottom of each space on all displays
 yabai -m config external_bar all:0:5
 
+# applications with custom rules
+applications="(Calendar|Mail|Reminders|Notes|Microsoft Outlook|Discord|Messages|Slack|Firefox|Chrome|Code|Microsoft Word|Preview|Terminal|iTerm2|QuickTime|Player|Spotify|Music)"
+
 # Do not manage some apps which are not resizable
 yabai -m rule --add app="^(JetBrains Toolbox|System Preferences|Finder|Software Update|Activity Monitor|Dictionary|Calculator|App Store|Alfred|TablePlus|Spotify|Music|Local|Skype|Calculator|VLC|System Preferences|zoom.us|Photo Booth|Archive Utility|Python|LibreOffice|WhatsApp|Keka|Postman)$" manage=off
 yabai -m rule --add label="PhpStorm" app="PhpStorm" title="^(Development|Preferences)" manage=off
