@@ -1,8 +1,8 @@
 #! /usr/bin/bash
 
 # opens Application
-# cmd - return : open /Applications/Warp.app
-cmd - return : open /Applications/iTerm.app
+cmd - return : open /Applications/Warp.app
+# cmd - return : open /Applications/iTerm.app
 alt - a : open /Applications/Asana.app
 alt - p : open /Applications/PhpStorm.app
 alt - b : open /Applications/Google\ Chrome.app
