@@ -1,3 +1,5 @@
+# Need to set othrs app https://www.youtube.com/watch?v=GK7zLYAXdDs
+#
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 
@@ -16,10 +18,8 @@ brew install neovim
 brew install tmux
 brew install stow
 brew install node
-brew install yarn
 brew install fzf
 brew install exa
-brew install --cask warp
 
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
@@ -31,11 +31,6 @@ stow git
 stow nvim
 stow tmux
 stow zsh 
-stow skhd
-
-#skhd https://github.com/koekeishiya/skhd
-brew install koekeishiya/formulae/skhd
-brew services start skhd
 
 
 # add zsh as a login shell
@@ -45,16 +40,5 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/mas
 
 upgrade_oh_my_zsh
 
-
-
-
-
-#iStat Menu 
-# https://bjango.com/mac/istatmenus/
-#iStat Menus for mac License
-# https://gist.github.com/yutao8/bc64680dbeb5f5ba17475b5c4f717e55
-# Email: 982092332@qq.com
-# SN: GAWAE-FCWQ3-P8NYB-C7GF7-NEDRT-Q5DTB-MFZG6-6NEQC-CRMUD-8MZ2K-66SRB-SU8EW-EDLZ9-TGH3S-8SGA
-
-#App Clenear
-https://freemacsoft.net/appcleaner/
+App Clenear
+# https://freemacsoft.net/appcleaner/
