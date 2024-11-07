@@ -112,7 +112,6 @@ source $ZSH/oh-my-zsh.sh
 # -------
 # Aliases
 # -------
-alias ls="exa -a --long --icons"
 alias a='code .'
 alias c='code .'
 alias reveal-md="reveal-md --theme night --highlight-theme hybrid --port 1337"
@@ -159,3 +158,17 @@ export PATH="/usr/local/opt/php@8.0/sbin:$PATH"
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
+
+
+# Herd injected NVM configuration
+export NVM_DIR="/Users/mahbubur/Library/Application Support/Herd/config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+
+[[ -f "/Applications/Herd.app/Contents/Resources/config/shell/zshrc.zsh" ]] && builtin source "/Applications/Herd.app/Contents/Resources/config/shell/zshrc.zsh"
+
+# Herd injected PHP 8.3 configuration.
+export HERD_PHP_83_INI_SCAN_DIR="/Users/mahbubur/Library/Application Support/Herd/config/php/83/"
+
+
+# Herd injected PHP binary.
+export PATH="/Users/mahbubur/Library/Application Support/Herd/bin/":$PATH
