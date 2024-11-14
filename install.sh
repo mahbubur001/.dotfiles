@@ -19,8 +19,10 @@ brew install tmux
 brew install stow
 brew install node
 brew install fzf
-brew install exa
-
+brew install --cask wezterm
+brew install zoxide
+brew install --cask nikitabobko/tap/aerospace # windowmanager https://www.josean.com/posts/how-to-setup-aerospace-tiling-window-manager
+brew install starship
 git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-history-substring-search
 git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
@@ -32,7 +34,9 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$
 stow git
 stow nvim
 stow tmux
-stow zsh 
+stow zsh
+stow wezterm
+stow aerospace
 
 
 # add zsh as a login shell
