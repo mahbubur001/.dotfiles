@@ -2,14 +2,7 @@
 
 # Homebrew (brew.sh)
 # ------------------------------------------------------------------------------
-if [[ -e "/usr/local/bin/brew" ]]; then
-  eval "$(/usr/local/bin/brew shellenv)"
-  export HOMEBREW_NO_AUTO_UPDATE=1
-fi
-if [[ -e "/opt/homebrew/bin/brew" ]]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-  export HOMEBREW_NO_AUTO_UPDATE=1
-fi
+eval "$(brew shellenv)"
 
 
 ## Brew completions
@@ -35,35 +28,40 @@ autoload -Uz compinit && compinit
 
 
 # fzf
+if type fzf &>/dev/null; then
+  eval "$(fzf --zsh)"
+fi
+
+
 [ -f "$HOME/.fzf.zsh" ] && source "$HOME/.fzf.zsh"
 
-# export FZF_CTRL_T_OPTS="
-#   --preview 'bat -n --color=always {}'
-#   --bind 'ctrl-/:change-preview-window(down|hidden|)'"
-# export FZF_DEFAULT_COMMAND='rg --hidden -l ""' # Include hidden files
+ export FZF_CTRL_T_OPTS="
+   --preview 'bat -n --color=always {}'
+   --bind 'ctrl-/:change-preview-window(down|hidden|)'"
+ export FZF_DEFAULT_COMMAND='rg --hidden -l ""' # Include hidden files
 
-# bindkey "ç" fzf-cd-widget # Fix for ALT+C on Mac
+ bindkey "ç" fzf-cd-widget # Fix for ALT+C on Mac
 
-# # fd - cd to selected directory
-# fd() {
-#   local dir
-#   dir=$(find ${1:-.} -path '*/\.*' -prune \
-#                   -o -type d -print 2> /dev/null | fzf +m) &&
-#   cd "$dir"
-# }
+ # fd - cd to selected directory
+ fd() {
+   local dir
+   dir=$(find ${1:-.} -path '*/\.*' -prune \
+                   -o -type d -print 2> /dev/null | fzf +m) &&
+   cd "$dir"
+ }
 
-# # fh - search in your command history and execute selected command
-# fh() {
-#   eval $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//')
-# }
+ # fh - search in your command history and execute selected command
+ fh() {
+   eval $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//')
+ }
 
-# # Tmux
-# # Always work in a tmux session if Tmux is installed
-# if which tmux 2>&1 >/dev/null; then
-#   if [ $TERM != "screen-256color" ] && [  $TERM != "screen" ]; then
-#     tmux attach -t default || tmux new -s default; exit
-#   fi
-# fi
+ # Tmux
+ # Always work in a tmux session if Tmux is installed
+ if which tmux 2>&1 >/dev/null; then
+   if [ $TERM != "screen-256color" ] && [  $TERM != "screen" ]; then
+     tmux attach -t default || tmux new -s default; exit
+   fi
+ fi
 
 
 # zoxide (better `cd`)

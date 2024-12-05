@@ -1,9 +1,51 @@
 #!/usr/bin/env zsh
-# zsh Options
-setopt HIST_IGNORE_ALL_DUPS
 
-# Custom zsh
-[ -f "$HOME/.config/zsh/custom.zsh" ] && source "$HOME/.config/zsh/custom.zsh"
+# Brew
+eval "$(brew shellenv)"
+
+# Add local ~/scripts to the PATH
+export PATH="$HOME/scripts:$PATH"
+
+export TMUX_CONF=~/.config/tmux/tmux.conf
+
+# Starship
+eval "$(starship init zsh)"
+# set Starship PATH
+export STARSHIP_CONFIG=$HOME/.config/starship/starship.toml
+
+
+# NOTE: Zoxide
+eval "$(zoxide init zsh)"
+
+# NOTE: FZF
+# Set up fzf key bindings and fuzzy completion
+eval "$(fzf --zsh)"
+
+export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git "
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND="fd --type=d --hidden --strip-cwd-prefix --exclude .git"
+
+export FZF_DEFAULT_OPTS="--height 50% --layout=default --border --color=hl:#2dd4bf"
+
+# Setup fzf previews
+export FZF_CTRL_T_OPTS="--preview 'bat --color=always -n --line-range :500 {}'"
+export FZF_ALT_C_OPTS="--preview 'eza --icons=always --tree --color=always {} | head -200'"
+
+# fzf preview for tmux
+export FZF_TMUX_OPTS=" -p90%,70% "
+
+# FZF with Git right in the shell by Junegunn : check out his github below
+# Keymaps for this is available at https://github.com/junegunn/fzf-git.sh
+source ~/scripts/fzf-git.sh
+
+# You may need to manually set your language environment
+export LANG=en_US.UTF-8
+
+
+# brew installations activation (new mac systems brew path: opt/homebrew , not usr/local )
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
 
 # Aliases
 [ -f "$HOME/.config/zsh/aliases.zsh" ] && source "$HOME/.config/zsh/aliases.zsh"
