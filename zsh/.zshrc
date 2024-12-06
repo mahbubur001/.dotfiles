@@ -1,10 +1,18 @@
 #!/usr/bin/env zsh
 
 # Brew
-eval "$(brew shellenv)"
+#eval "$(brew shellenv)"
+if [[ -e "/usr/local/bin/brew" ]]; then
+  eval "$(/usr/local/bin/brew shellenv)"
+  export HOMEBREW_NO_AUTO_UPDATE=1
+fi
+if [[ -e "/opt/homebrew/bin/brew" ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+  export HOMEBREW_NO_AUTO_UPDATE=1
+fi
 
 # Add local ~/scripts to the PATH
-export PATH="$HOME/scripts:$PATH"
+export PATH="$HOME/.config/zsh:$PATH"
 
 export TMUX_CONF=~/.config/tmux/tmux.conf
 
@@ -36,7 +44,7 @@ export FZF_TMUX_OPTS=" -p90%,70% "
 
 # FZF with Git right in the shell by Junegunn : check out his github below
 # Keymaps for this is available at https://github.com/junegunn/fzf-git.sh
-source ~/scripts/fzf-git.sh
+[ -f "$HOME/.config/zsh/fzf-git.sh" ] && source $HOME/.config/zsh/fzf-git.sh
 
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8

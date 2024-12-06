@@ -64,4 +64,4 @@ TODO.md
 .env
 
 # ignore dotfiles bare repository
-.dotfiles
+dotfiles
