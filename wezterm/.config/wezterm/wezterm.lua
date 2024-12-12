@@ -2,7 +2,7 @@ local wezterm = require("wezterm")
 local  config = wezterm.config_builder()
 
 -- config.force_reverse_video_cursor = true
-config.font_size = 16
+config.font_size = 15
 config.font = wezterm.font('JetBrainsMonoNL Nerd Font')
 config.automatically_reload_config = true
 config.enable_tab_bar = false
