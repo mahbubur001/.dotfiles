@@ -43,6 +43,8 @@ brew install starship #https://github.com/starship/starship
 #brew install tree-sitter
 brew install tree #tree view of folder
 #brew install borders
+brew install stats
+brew install --cask appcleaner
 
 
 ### dev things

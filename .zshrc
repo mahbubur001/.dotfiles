@@ -1,1 +1,0 @@
-/Users/radiustheme/dotfiles/zsh/.zshrc
